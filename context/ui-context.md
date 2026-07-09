@@ -93,6 +93,16 @@ shadcn/ui on top of Tailwind. No custom design system. Components live in `compo
 - Modals and dialogs: centered overlay, `rounded-3xl`, white background with backdrop blur over a dimmed page.
 - Navbar: sticky top bar, white background, subtle bottom border, elevates with a soft shadow on scroll.
 
+## Responsiveness
+
+Every page is mobile-first: base (unprefixed) classes target small phones (~360px wide) and scale up via `sm:`/`lg:` — never the reverse. Concretely:
+
+- Type scale steps down on mobile: page titles `text-3xl sm:text-4xl lg:text-5xl`, section headings `text-2xl sm:text-3xl`, lead paragraphs `text-base sm:text-lg`.
+- Section vertical padding tightens on mobile: `py-12 sm:py-16 lg:py-20`-style progressions.
+- CTA buttons are full-width on mobile (`w-full sm:w-auto`), stacked in a column (`flex-col gap-3 sm:flex-row`).
+- Section headers with a trailing action ("Ver todo") stack vertically on mobile instead of squeezing side by side.
+- Nothing may cause horizontal overflow at 360px; wide content scrolls inside its own container, never the page.
+
 ## Motion
 
 Framer Motion is used for page transitions, card hover states, and modal/drawer entrances — subtle and physically plausible (spring-based, not linear), never decorative for its own sake. Typical durations: 150–250ms for micro-interactions (hover, tap feedback), 300–400ms for panel/modal transitions. Respect `prefers-reduced-motion`: fall back to opacity-only transitions when set.

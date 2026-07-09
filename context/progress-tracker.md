@@ -4,15 +4,36 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
+Public site foundation — landing page implemented, catalog and auth flows not started.
+
 ## Current Goal
 
+Build out the public catalog (`/catalogo`) that the landing page links to.
+
 ## Completed
+
+- Landing (home) page at `/` inside the `app/(public)` route group, implemented from the v0 design spec (v0.app chat `jGFCPmKt5rE`), fully tokenized and in Spanish:
+  - `components/layout/`: `navbar.tsx` (sticky, scroll elevation, mobile sheet), `siteFooter.tsx`, `brandMark.tsx`.
+  - `components/home/`: `hero.tsx`, `aboutSection.tsx`, `catalogPreview.tsx`, `categoryCard.tsx`, `listingCard.tsx`, `categoryBadge.tsx`, `howItWorks.tsx`.
+  - `components/motion/reveal.tsx`: shared scroll-into-view fade/slide wrapper (Framer Motion, respects `prefers-reduced-motion`).
+  - `content/site.ts` (brand, nav, footer, metadata) and `content/home.ts` (hero, about, catalog preview, how-it-works) hold all Spanish copy; sample listings in `content/home.ts` are placeholders until Supabase powers the catalog.
+  - `types/domain.ts`: `Category`, `RentalStatus`, `CATEGORY_COLORS`, `RENTAL_STATUS_COLORS` per `ui-context.md`.
+  - `app/(public)/layout.tsx` wraps public pages with navbar + footer; root layout metadata now comes from `content/site.ts`.
+  - shadcn/ui `card`, `badge`, `sheet` added via the CLI (unmodified); AI-generated placeholder photos in `public/images/`.
+- `npm run build` passes; all routes static.
 
 ## In Progress
 
 ## Next Up
 
+- Public catalog page (`/catalogo`) with filters (type, price, contract length, availability) — the landing page already links to `/catalogo` and `/catalogo?categoria=<estate|machinery|service>`.
+- Clerk sign-in flow — navbar links to `/sign-in` (Clerk convention) and `/perfil`; neither route exists yet.
+
 ## Open Questions
+
+- Footer links to `/contacto`, `/terminos`, and `/privacidad` — these pages are not defined in the context files yet.
+- Brand casing: the v0 design brief uses "MILOCATIVA" while `project-overview.md` says "Mi Locativa" — the landing page follows the design brief ("MILOCATIVA").
+- Hero trust stats ("+120 activos disponibles") are filler numbers from the design brief; replace with real counts once the catalog is live.
 
 ## Architecture Decisions
 
