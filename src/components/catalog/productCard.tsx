@@ -22,7 +22,7 @@ export function ProductCard({
 
   return (
     <Link
-      href="#"
+      href={`/catalogo/${product.id}`}
       className="group flex flex-col gap-2.5 transition-transform duration-200 ease-out hover:-translate-y-1"
     >
       <div

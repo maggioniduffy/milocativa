@@ -13,8 +13,6 @@ export interface CatalogBuilding {
   address: string;
   available: number;
   total: number;
-  /** CSS gradient placeholder until real photos come from Supabase Storage. */
-  cover: string;
   coverAlt: string;
 }
 
@@ -91,7 +89,6 @@ export const catalogContent = {
       address: "Av. San Martín 450, Añelo",
       available: 3,
       total: 8,
-      cover: gradient(205, true),
       coverAlt: "Fachada de Torre Añelo",
     },
     {
@@ -100,7 +97,6 @@ export const catalogContent = {
       address: "Los Álamos 120, Añelo",
       available: 5,
       total: 12,
-      cover: gradient(170, true),
       coverAlt: "Fachada de Residencial Shale",
     },
     {
@@ -109,7 +105,6 @@ export const catalogContent = {
       address: "Ruta 7 Km 12, Añelo",
       available: 2,
       total: 6,
-      cover: gradient(200, true),
       coverAlt: "Fachada de Complejo Neuquén",
     },
     {
@@ -118,7 +113,6 @@ export const catalogContent = {
       address: "Calle 9 y 20, Añelo",
       available: 7,
       total: 10,
-      cover: gradient(155, true),
       coverAlt: "Fachada de Edificio Vaca Muerta",
     },
     {
@@ -127,7 +121,6 @@ export const catalogContent = {
       address: "Los Nogales 88, Añelo",
       available: 1,
       total: 9,
-      cover: gradient(210, true),
       coverAlt: "Fachada de Mirador del Valle",
     },
   ] satisfies CatalogBuilding[],

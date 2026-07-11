@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Building2, HardHat, SquareParking, Truck, type LucideIcon } from "lucide-react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import type { HomeCategoryCard } from "@/content/home";
 import { CATEGORY_COLORS, type Category } from "@/types/domain";
 
@@ -21,21 +20,24 @@ export function CategoryCard({ category }: CategoryCardProps) {
   const colors = CATEGORY_COLORS[category.id];
 
   return (
-    <Link href={category.href} className="group block rounded-2xl">
-      <Card className="h-full rounded-2xl transition duration-200 group-hover:-translate-y-1 group-hover:shadow-lg">
-        <CardContent className="space-y-3">
-          <span
-            className="flex h-12 w-12 items-center justify-center rounded-full"
-            style={{ backgroundColor: colors.fill, color: colors.text }}
-          >
-            <Icon className="h-6 w-6" />
-          </span>
-          <h3 className="text-lg font-semibold text-copy-primary">
-            {category.name}
-          </h3>
-          <p className="text-sm text-copy-muted">{category.description}</p>
-        </CardContent>
-      </Card>
+    <Link
+      href={category.href}
+      className="flex h-full flex-col gap-2.5 rounded-2xl border border-surface-border bg-surface px-5 py-[18px] shadow-sm transition duration-200 ease-out hover:-translate-y-1 hover:shadow-xl"
+    >
+      <div className="flex items-center gap-3.5">
+        <span
+          className="grid h-12 w-12 shrink-0 place-items-center rounded-[14px]"
+          style={{ backgroundColor: colors.fill, color: colors.text }}
+        >
+          <Icon className="h-6 w-6" />
+        </span>
+        <h3 className="text-lg font-bold text-copy-primary sm:text-[19px]">
+          {category.name}
+        </h3>
+      </div>
+      <p className="text-sm leading-relaxed text-copy-muted sm:text-[14.5px]">
+        {category.description}
+      </p>
     </Link>
   );
 }

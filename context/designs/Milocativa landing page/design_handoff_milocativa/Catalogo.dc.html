@@ -136,7 +136,57 @@
       <div ref="{{ railRef }}" class="rail" style="display: flex; gap: 20px; overflow-x: auto; padding: 4px 4px 8px; scroll-snap-type: x mandatory; scroll-behavior: smooth;">
         <sc-for list="{{ buildings }}" as="b" hint-placeholder-count="4">
           <a href="{{ b.href }}" style="scroll-snap-align: start; flex: 0 0 320px; max-width: 320px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
-            <div style="position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; background: {{ b.cover }}; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+            <div style="position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; background: {{ b.illoBg }}; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+              <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMax slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true">
+                <circle cx="246" cy="52" r="25" fill="#A9BAC0" opacity="0.55"></circle>
+                <g fill="#FFFFFF" opacity="0.85">
+                  <circle cx="230" cy="66" r="15"></circle>
+                  <circle cx="250" cy="58" r="19"></circle>
+                  <circle cx="270" cy="68" r="13"></circle>
+                  <rect x="222" y="64" width="60" height="18" rx="9"></rect>
+                </g>
+                <g fill="#FFFFFF" opacity="0.7">
+                  <circle cx="98" cy="62" r="10"></circle>
+                  <circle cx="112" cy="56" r="13"></circle>
+                  <circle cx="127" cy="63" r="9"></circle>
+                  <rect x="90" y="60" width="44" height="13" rx="6.5"></rect>
+                </g>
+
+                <rect x="66" y="118" width="66" height="106" rx="10" fill="{{ b.illoColor }}" opacity="0.4"></rect>
+                <g fill="{{ b.illoBg }}">
+                  <rect x="78" y="134" width="13" height="15" rx="2"></rect>
+                  <rect x="100" y="134" width="13" height="15" rx="2"></rect>
+                  <rect x="78" y="160" width="13" height="15" rx="2"></rect>
+                  <rect x="100" y="160" width="13" height="15" rx="2"></rect>
+                  <rect x="78" y="186" width="13" height="15" rx="2"></rect>
+                  <rect x="100" y="186" width="13" height="15" rx="2"></rect>
+                </g>
+
+                <rect x="196" y="102" width="62" height="122" rx="10" fill="{{ b.illoColor }}" opacity="0.65"></rect>
+                <g fill="{{ b.illoBg }}">
+                  <rect x="207" y="118" width="12" height="14" rx="2"></rect>
+                  <rect x="228" y="118" width="12" height="14" rx="2"></rect>
+                  <rect x="207" y="142" width="12" height="14" rx="2"></rect>
+                  <rect x="228" y="142" width="12" height="14" rx="2"></rect>
+                  <rect x="207" y="166" width="12" height="14" rx="2"></rect>
+                  <rect x="228" y="166" width="12" height="14" rx="2"></rect>
+                  <rect x="207" y="190" width="12" height="14" rx="2"></rect>
+                  <rect x="228" y="190" width="12" height="14" rx="2"></rect>
+                </g>
+
+                <rect x="122" y="70" width="76" height="154" rx="12" fill="{{ b.illoColor }}"></rect>
+                <g fill="{{ b.illoBg }}">
+                  <rect x="136" y="88" width="14" height="16" rx="2.5"></rect>
+                  <rect x="160" y="88" width="14" height="16" rx="2.5"></rect>
+                  <rect x="136" y="116" width="14" height="16" rx="2.5"></rect>
+                  <rect x="160" y="116" width="14" height="16" rx="2.5"></rect>
+                  <rect x="136" y="144" width="14" height="16" rx="2.5"></rect>
+                  <rect x="160" y="144" width="14" height="16" rx="2.5"></rect>
+                  <rect x="136" y="172" width="14" height="16" rx="2.5"></rect>
+                  <rect x="160" y="172" width="14" height="16" rx="2.5"></rect>
+                  <rect x="147" y="200" width="20" height="24" rx="4"></rect>
+                </g>
+              </svg>
               <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.94); color: #0C5678; font-weight: 700; font-size: 12.5px; padding: 6px 12px; border-radius: 999px; backdrop-filter: blur(4px); box-shadow: 0 1px 3px rgba(11,31,38,.12);">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"></path><path d="M9 16h.01"></path><path d="M15 12h.01"></path><path d="M15 16h.01"></path><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
                 {{ b.availableLabel }}
@@ -348,6 +398,13 @@ class Component extends DCLogic {
     return `linear-gradient(135deg, hsl(${hue} ${dark?28:34}% ${dark?38:74}%), hsl(${hue+18} 30% ${c}%))`;
   }
 
+  tint(hex, amt) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    const r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+    const mix = (ch) => Math.round(ch + (255 - ch) * amt);
+    return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
+  }
+
   renderVals() {
     const d = this.dict();
     const active = this.state.activeType;
@@ -373,14 +430,17 @@ class Component extends DCLogic {
       };
     });
 
-    const buildings = d.buildings.map((b) => {
+    const catColors = ['#0C5678', '#B57614', '#0E8C7F'];
+    const buildings = d.buildings.map((b, i) => {
       const fav = !!this.state.favorites['b_' + b.slug];
+      const illoColor = catColors[i % catColors.length];
       return {
         name: b.name,
         address: b.address,
         availableLabel: `${b.available} disponibles de ${b.total}`,
         href: `Edificio.dc.html`,
-        cover: this.cover(b.hue, true),
+        illoColor,
+        illoBg: this.tint(illoColor, 0.86),
         heartFill: fav ? '#D9483F' : 'rgba(11,31,38,.28)',
         heartStroke: fav ? '#D9483F' : '#FFFFFF',
         toggleFav: (e) => this.toggleFav('b_' + b.slug, e),

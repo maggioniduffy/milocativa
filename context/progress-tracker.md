@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-Public site foundation — landing page implemented, catalog and auth flows not started.
+Public site foundation — landing, catalog, and building detail pages implemented with placeholder data; auth flows not started.
 
 ## Current Goal
 
-Build out the public catalog (`/catalogo`) that the landing page links to.
+Wire the catalog and building pages to Supabase (real listings, buildings, and unit statuses) and start the Clerk sign-in flow.
 
 ## Completed
 
@@ -21,12 +21,35 @@ Build out the public catalog (`/catalogo`) that the landing page links to.
   - `app/(public)/layout.tsx` wraps public pages with navbar + footer; root layout metadata now comes from `content/site.ts`.
   - shadcn/ui `card`, `badge`, `sheet` added via the CLI (unmodified); AI-generated placeholder photos in `public/images/`.
 - `npm run build` passes; all routes static.
+- Catalog page at `/catalogo` and building detail at `/edificios/[slug]`, implemented from the Claude Design handoff (`context/designs/Milocativa landing page/design_handoff_milocativa/`):
+  - `content/catalog.ts` and `content/building.ts` hold all Spanish copy plus placeholder buildings/products/units until Supabase powers the catalog.
+  - `types/domain.ts` extended: `Category` now includes `parking`; added `UnitStatus` (`RentalStatus | available | external`), `UNIT_STATUS_COLORS` (with borders), `CATALOG_FILTER_COLORS`, and the external/parking hatch gradients.
+  - `components/catalog/`: `catalogSearch.tsx` (expanded search + type/price/duración/disponibilidad filter row + compact navbar pill), `buildingsRail.tsx` (snap carousel with arrows, favorites, staggered "Mostrar todo" card), `productsGrid.tsx` + `productCard.tsx` (Airbnb-style cards, category dot badges, favorites, "Con cochera disponible" badge).
+  - `components/building/`: `buildingDiagram.tsx` (interactive floor/unit cross-section with hover/tap popovers, inert hatched "No publicado" units, striped parking level, staggered riseIn entrance respecting `prefers-reduced-motion`), `statusLegend.tsx`, `buildingSummary.tsx` (sticky summary + CTA).
+  - Navbar (`components/layout/navbar.tsx`) hosts the catalog search on `/catalogo`: past 40px scroll the search block collapses and a compact pill replaces the center links; clicking it scrolls back to top.
+  - Type filter state lives in the `?categoria=` URL param (`hooks/useCatalogFilter.ts`), so the landing/footer links (`/catalogo?categoria=estate|machinery|service`) filter the grid directly; `useSearchParams` consumers are Suspense-wrapped so both routes stay static.
+  - Catalog products reuse landing photos where they match; remaining covers are CSS gradient placeholders per the handoff (replace with real photos).
+  - `context/designs/**` excluded from ESLint (prototype runtime files are reference-only).
+- Landing reworked to match the Claude Design handoff (replacing the v0 look):
+  - Navbar transparent at top → solid white + border + shadow past 24px scroll (all pages); brand mark now uses the petrol building-glyph tile.
+  - Hero: radial petrol blob + SVG-grain overlay, pill badge with map pin, pill CTAs with arrow, dot-separated stat row, photo panel with deep shadow, staggered reveals.
+  - "Nosotros" is a 3D `rotateX` hover/tap flip card (`aboutSection.tsx`); title accent uses Instrument Serif italic (`--font-serif-accent`, loaded via `next/font`); reduced motion crossfades instead of rotating.
+  - Category cards use the icon-tile + title top-row layout; catalog preview cards are Airbnb-style (`listingCard.tsx`: dot badge, heart, star rating, price + availability status with success/warning tone) — new copy and six handoff listings in `content/home.ts`.
+  - "Cómo funciona" lives in a large white rounded panel with a corner blob; footer got the rounded-top-corners + soft top shadow treatment.
+  - `topo-bg.js` ported to `components/layout/topoBackground.tsx` (fixed animated topographic canvas behind landing + building pages; static frame under reduced motion).
+  - `components/home/categoryBadge.tsx` removed (superseded by the inline dot badge).
+- Product detail page at `/catalogo/[id]`, Airbnb-style single-listing layout, placeholder data:
+  - `content/product.ts`: `ProductDetail` (description, quick facts, features, gallery photos) per catalog product id, joined to `CatalogProduct` via `getProductById`.
+  - `components/product/`: `productGallery.tsx` (bento hero + up to 4 tiles, degrades to single hero photo or plain cover for products without extra photos), `productOverview.tsx` (quick facts row, description, features checklist, location note), `productBookingCard.tsx` (sticky price/rating card, local favorite toggle, "Iniciar conversación" CTA linking to `/sign-in`).
+  - `productCard.tsx` now links to `/catalogo/[id]` instead of `#`.
+  - No live chat/booking wired yet — CTA only routes to sign-in, matching the "auth flows not started" phase.
 
 ## In Progress
 
 ## Next Up
 
-- Public catalog page (`/catalogo`) with filters (type, price, contract length, availability) — the landing page already links to `/catalogo` and `/catalogo?categoria=<estate|machinery|service>`.
+- Wire `/catalogo` and `/edificios/[slug]` to Supabase: listings, buildings, per-unit rental statuses; replace in-memory favorites with real user state.
+- Price / Duración / Disponibilidad filter dropdowns and the search input are visual stubs — define their behavior and implement.
 - Clerk sign-in flow — navbar links to `/sign-in` (Clerk convention) and `/perfil`; neither route exists yet.
 
 ## Open Questions
@@ -34,6 +57,8 @@ Build out the public catalog (`/catalogo`) that the landing page links to.
 - Footer links to `/contacto`, `/terminos`, and `/privacidad` — these pages are not defined in the context files yet.
 - Brand casing: the v0 design brief uses "MILOCATIVA" while `project-overview.md` says "Mi Locativa" — the landing page follows the design brief ("MILOCATIVA").
 - Hero trust stats ("+120 activos disponibles") are filler numbers from the design brief; replace with real counts once the catalog is live.
+- Only Torre Añelo has building detail data, so every building card links to `/edificios/torre-anelo` for now (the design prototype does the same); real slugs need per-building unit data from Supabase.
+- Product detail pages now exist at `/catalogo/[id]` for catalog products; building unit blocks (`buildingDiagram.tsx`) still link to `#` since building units aren't in the catalog product id space yet.
 
 ## Architecture Decisions
 

@@ -14,6 +14,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import { catalogContent, type CatalogBuilding } from "@/content/catalog";
 import { cn } from "@/lib/utils";
+import { BuildingIllustration, buildingIllustrationColor } from "./buildingIllustration";
 
 const RAIL_SCROLL_STEP = 680;
 
@@ -75,10 +76,11 @@ export function BuildingsRail() {
         ref={railRef}
         className="-mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-2 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:px-1 [&::-webkit-scrollbar]:hidden"
       >
-        {buildings.map((building) => (
+        {buildings.map((building, index) => (
           <BuildingCard
             key={building.slug}
             building={building}
+            color={buildingIllustrationColor(index)}
             isFavorite={!!favorites[building.slug]}
             onToggleFavorite={() => toggleFavorite(building.slug)}
           />
@@ -91,11 +93,12 @@ export function BuildingsRail() {
 
 interface BuildingCardProps {
   building: CatalogBuilding;
+  color: string;
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }
 
-function BuildingCard({ building, isFavorite, onToggleFavorite }: BuildingCardProps) {
+function BuildingCard({ building, color, isFavorite, onToggleFavorite }: BuildingCardProps) {
   const { buildingsSection } = catalogContent;
 
   return (
@@ -109,8 +112,8 @@ function BuildingCard({ building, isFavorite, onToggleFavorite }: BuildingCardPr
         role="img"
         aria-label={building.coverAlt}
         className="relative aspect-[3/2] overflow-hidden rounded-2xl shadow-sm transition-shadow duration-200 group-hover:shadow-xl"
-        style={{ background: building.cover }}
       >
+        <BuildingIllustration color={color} />
         <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-surface/95 px-3 py-1.5 text-[12.5px] font-bold text-brand shadow-sm backdrop-blur-sm">
           <Building2 className="h-3.5 w-3.5" />
           {buildingsSection.availableTemplate(building.available, building.total)}

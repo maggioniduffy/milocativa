@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { CircleUserRound, Menu } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -14,43 +15,82 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { BrandMark } from "@/components/layout/brandMark";
+import {
+  CatalogCompactPill,
+  CatalogSearchPanel,
+} from "@/components/catalog/catalogSearch";
 import { siteContent } from "@/content/site";
 import { cn } from "@/lib/utils";
 
+/** Scroll depth past which the catalog search collapses into the compact pill. */
+const SEARCH_COLLAPSE_THRESHOLD = 40;
+
 export function Navbar() {
   const [elevated, setElevated] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
   const { nav } = siteContent;
+  // The catalog page embeds an Airbnb-style search block in the navbar.
+  const hasCatalogSearch = pathname === "/catalogo";
 
   useEffect(() => {
-    const onScroll = () => setElevated(window.scrollY > 8);
+    const onScroll = () => {
+      setElevated(window.scrollY > 24);
+      setCollapsed(window.scrollY > SEARCH_COLLAPSE_THRESHOLD);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const showCompactPill = hasCatalogSearch && collapsed;
+
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 border-b border-surface-border transition-[background-color,box-shadow] duration-200",
+        "sticky top-0 z-40 border-b transition-[background-color,box-shadow,border-color] duration-200",
         elevated
-          ? "bg-surface/80 shadow-md backdrop-blur-md"
-          : "bg-surface"
+          ? "border-surface-border bg-surface/80 shadow-md backdrop-blur-md"
+          : "border-transparent bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <BrandMark />
 
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Principal">
-          {nav.links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-copy-secondary transition-colors hover:text-copy-primary"
+        <div className="relative flex min-h-11 flex-1 items-center justify-center">
+          <nav
+            className={cn(
+              "hidden items-center gap-6 transition-all duration-200 md:flex",
+              showCompactPill && "pointer-events-none -translate-y-2.5 opacity-0"
+            )}
+            aria-label="Principal"
+          >
+            {nav.links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-copy-secondary transition-colors hover:text-copy-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {hasCatalogSearch ? (
+            <div
+              className={cn(
+                "absolute transition-all duration-200",
+                showCompactPill
+                  ? "translate-y-0 opacity-100"
+                  : "pointer-events-none translate-y-2.5 opacity-0"
+              )}
             >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+              <Suspense fallback={null}>
+                <CatalogCompactPill />
+              </Suspense>
+            </div>
+          ) : null}
+        </div>
 
         <div className="hidden items-center gap-3 md:flex">
           <Link
@@ -123,6 +163,21 @@ export function Navbar() {
           </SheetContent>
         </Sheet>
       </div>
+
+      {hasCatalogSearch ? (
+        <div
+          className="overflow-hidden transition-all duration-300 ease-out"
+          style={{
+            maxHeight: collapsed ? 0 : 240,
+            opacity: collapsed ? 0 : 1,
+            transform: collapsed ? "translateY(-10px)" : "none",
+          }}
+        >
+          <Suspense fallback={null}>
+            <CatalogSearchPanel />
+          </Suspense>
+        </div>
+      ) : null}
     </header>
   );
 }
