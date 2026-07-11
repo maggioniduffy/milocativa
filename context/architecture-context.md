@@ -14,6 +14,7 @@
 | Payments           | Stripe + MercadoPago                 | In-app payment processing; webhooks reconcile `Payment` records                            |
 | Email              | Resend                               | Transactional email (new message, rental accepted, payment confirmation)                   |
 | Push               | web-push (VAPID)                     | Web push notifications for admins and users                                                |
+| Maps               | MapLibre GL JS + open vector tiles   | Property map view — minimal "keen" style, custom street coloring, hover markers            |
 
 ## System Boundaries
 
@@ -26,12 +27,17 @@
 - `lib/notifications` — Notification fan-out helpers (in-app insert, push send, email send).
 - `components` — UI composition: item cards, filter bar, chat thread, admin panel views.
 - `types` — Shared TypeScript types generated from the Supabase schema.
+- `components/map` — property map view: vector tile style, marker rendering, hover cards.
+- `components/building` — building grouping view: floor/unit layout, interactive unit selection.
 
 ## Storage Model
 
 - **Database (Supabase Postgres)**: all structured data — `people`, `items`, `categories`, `availability`, `listings`, `rentals`, `payments`, `reviews`, `conversations`, `messages`, `notifications`, `push_subscriptions`. This is the single source of truth; there is no separate metadata/artifact split.
 - **Supabase Storage**: binary assets only — item photos, uploaded documents. Buckets are scoped by item (`items/{itemId}/...`); the resulting public or signed URL is stored on the `Item` or `Listing` record, not the file itself.
 - No blob storage outside Supabase is used; keeping storage and database on one platform avoids a second auth/access-control surface.
+- `Building` is a regular Postgres table; `Estate` and `ParkingSpot` rows reference it via an optional `buildingId` (null for standalone properties, no building record required).
+- A `Rental` no longer maps to exactly one `Item`. Bundled rentals (e.g. an `Estate` + its `ParkingSpot`) are modeled through a `rental_items` join table; a `Rental` always has one or more `RentalItem` rows.
+- `Estate.latitude` / `Estate.longitude` are the source of truth for map markers — no separate geocoding service is called at read time; coordinates are captured once when the listing is created or edited.
 
 ## Auth and Access Model
 
@@ -74,3 +80,4 @@
 3. Role checks (`admin` vs `user`) are enforced both in `proxy.ts` (route-level) and in RLS policies (data-level); the route check is a UX convenience, the RLS policy is the real boundary.
 4. Payment state is only ever written by a verified webhook or an explicit admin action — never inferred client-side.
 5. Client components (`'use client'`) are used only where Realtime subscriptions, form interactivity, or animation require it; data fetching for initial page loads stays in server components.
+6. A `Rental` is never assumed to reference exactly one `Item` — always read/write through `rental_items`, never through a single `itemId` foreign key on `Rental`.

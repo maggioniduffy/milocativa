@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F7F9FA; color: #0B1F26; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #0C5678; }
+    a:hover { color: #0A465F; }
+    ::selection { background: rgba(12,86,120,0.15); }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      [data-anim] { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</helmet>
+
+<div style="min-width: 360px; overflow-x: clip;">
+
+  <!-- BACKGROUND LAYER: topographic canvas -->
+  <div style="position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;">
+    <div style="position: absolute; top: -15%; left: -10%; width: 55vw; height: 55vw; border-radius: 50%; background: radial-gradient(circle, rgba(14,140,127,.06) 0%, transparent 65%);"></div>
+    <x-import component-from-global-scope="topo-bg" from="./topo-bg.js" hint-size="100%,100%" style="position: absolute; inset: 0;"></x-import>
+  </div>
+
+  <!-- NAVBAR -->
+  <header ref="{{ navRef }}" data-screen-label="Navbar" style="position: sticky; top: 0; z-index: 60; background: transparent; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: background-color .2s ease, box-shadow .2s ease, border-color .2s ease;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="MILOCATIVA Landing.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0B1F26;">
+        <span style="width: 32px; height: 32px; border-radius: 10px; background: #0C5678; display: grid; place-items: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+        </span>
+        <span style="font-weight: 800; letter-spacing: .04em; font-size: 17px;">MILOCATIVA</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+        <a href="MILOCATIVA Landing.dc.html" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Inicio</a>
+        <a href="Catalogo.dc.html" style="text-decoration: none; color: #0B1F26; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; background: #EEF2F3; transition: background .15s ease;" style-hover="background: #E4EAEC;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Catálogo</a>
+        <a href="MILOCATIVA Landing.dc.html#como-funciona" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Cómo funciona</a>
+        <a href="MILOCATIVA Landing.dc.html#nosotros" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Nosotros</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="#" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Perfil
+        </a>
+        <a href="#" style="display: inline-flex; align-items: center; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 14px; padding: 10px 20px; border-radius: 999px; box-shadow: 0 2px 8px rgba(12,86,120,.25); transition: background .2s ease, transform .1s ease;" style-hover="background: #0A465F; color: #FFFFFF;" style-active="transform: scale(.97);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Ingresar</a>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1120px; margin: 0 auto; padding: 24px 24px 80px;">
+
+    <!-- HEADER -->
+    <a href="Catalogo.dc.html" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #6F8790; font-weight: 700; font-size: 14px; margin-bottom: 20px; transition: color .15s ease;" style-hover="color: #0C5678;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+      Volver al catálogo
+    </a>
+
+    <div data-anim style="animation: riseIn .5s cubic-bezier(.22,1,.36,1) both; margin-bottom: 36px;">
+      <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(12,86,120,0.10); color: #0C5678; font-weight: 700; font-size: 12.5px; padding: 6px 13px; border-radius: 999px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"></path><path d="M9 16h.01"></path><path d="M15 12h.01"></path><path d="M15 16h.01"></path><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+        Edificio
+      </span>
+      <h1 style="margin: 12px 0 8px; font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;">{{ building.name }}</h1>
+      <p style="margin: 0 0 10px; font-size: 15px; color: #6F8790; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        {{ building.address }}
+      </p>
+      <p style="margin: 0; max-width: 620px; font-size: 15.5px; line-height: 1.6; color: #3E545C; text-wrap: pretty;">{{ building.description }}</p>
+    </div>
+
+    <div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">
+
+      <!-- CROSS-SECTION DIAGRAM -->
+      <div style="flex: 1 1 460px; min-width: 300px;">
+        <div style="background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 24px; padding: clamp(16px, 3vw, 28px); box-shadow: 0 4px 24px rgba(11,31,38,.05); position: relative;">
+          <sc-for list="{{ floors }}" as="fl" hint-placeholder-count="4">
+            <div data-anim style="animation: riseIn .5s cubic-bezier(.22,1,.36,1) both; animation-delay: {{ fl.delay }}; display: flex; align-items: stretch; gap: 10px; margin-bottom: 10px;">
+              <div style="flex: 0 0 44px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: #9FB2B8; background: #F7F9FA; border-radius: 10px;">{{ fl.label }}</div>
+              <div style="flex: 1; display: grid; grid-template-columns: {{ fl.cols }}; gap: 10px;">
+                <sc-for list="{{ fl.units }}" as="u" hint-placeholder-count="2">
+                  <a href="{{ u.href }}" onMouseEnter="{{ u.onEnter }}" onMouseLeave="{{ u.onLeave }}" onClick="{{ u.onTap }}" style="position: relative; text-decoration: none; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 14px 14px; min-height: 62px; border-radius: 14px; border: 1.5px solid {{ u.border }}; background: {{ u.bg }}; cursor: {{ u.cursor }}; transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;" style-hover="transform: {{ u.hoverT }}; box-shadow: {{ u.hoverS }}; z-index: 5;">
+                    <span style="font-weight: 800; font-size: 14px; color: #0B1F26;">{{ u.name }}</span>
+                    <span style="font-weight: 700; font-size: 11.5px; color: {{ u.statusColor }};">{{ u.statusLabel }}</span>
+                    <!-- desktop popover -->
+                    <sc-if value="{{ u.open }}" hint-placeholder-val="{{ false }}">
+                      <div style="position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 20; width: 220px; background: #0B1F26; color: #FFFFFF; border-radius: 14px; padding: 12px 14px; box-shadow: 0 16px 40px rgba(11,31,38,.35); pointer-events: none;">
+                        <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 3px;">{{ u.name }}</div>
+                        <div style="font-weight: 700; font-size: 13px; color: #A9C4CE; margin-bottom: 5px;">{{ u.price }}</div>
+                        <div style="font-weight: 600; font-size: 12px; color: #C9D3D6; line-height: 1.4;">{{ u.note }}</div>
+                        <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid #0B1F26;"></div>
+                      </div>
+                    </sc-if>
+                  </a>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+
+          <!-- PARKING LEVEL (distinct striped bays) -->
+          <div data-anim style="animation: riseIn .5s cubic-bezier(.22,1,.36,1) both; animation-delay: {{ parkingDelay }}; display: flex; align-items: stretch; gap: 10px; margin-top: 4px;">
+            <div style="flex: 0 0 44px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; color: #6F8790; background: #EEF2F3; border-radius: 10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 17V7h4a3 3 0 0 1 0 6H9"></path></svg>
+            </div>
+            <div style="flex: 1; background: repeating-linear-gradient(45deg, #EEF2F3, #EEF2F3 8px, #E4EAEC 8px, #E4EAEC 16px); border-radius: 14px; padding: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(58px, 1fr)); gap: 8px;">
+              <sc-for list="{{ parking }}" as="pk" hint-placeholder-count="5">
+                <a href="{{ pk.href }}" onMouseEnter="{{ pk.onEnter }}" onMouseLeave="{{ pk.onLeave }}" onClick="{{ pk.onTap }}" style="position: relative; text-decoration: none; display: flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 10px; border: 1.5px solid {{ pk.border }}; background: {{ pk.bg }}; font-weight: 800; font-size: 12.5px; color: #0B1F26; transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;" style-hover="transform: translateY(-3px); box-shadow: 0 10px 22px rgba(11,31,38,.14); z-index: 5;">
+                  {{ pk.name }}
+                  <sc-if value="{{ pk.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 20; width: 200px; background: #0B1F26; color: #FFFFFF; border-radius: 14px; padding: 12px 14px; box-shadow: 0 16px 40px rgba(11,31,38,.35); pointer-events: none;">
+                      <div style="font-weight: 800; font-size: 13.5px; margin-bottom: 3px;">{{ pk.name }}</div>
+                      <div style="font-weight: 700; font-size: 13px; color: #A9C4CE; margin-bottom: 5px;">{{ pk.price }}</div>
+                      <div style="font-weight: 600; font-size: 12px; color: #C9D3D6; line-height: 1.4;">{{ pk.note }}</div>
+                      <div style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid #0B1F26;"></div>
+                    </div>
+                  </sc-if>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEGEND -->
+        <div style="display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; padding: 0 4px;">
+          <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="5">
+            <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: #3E545C;">
+              <span style="width: 14px; height: 14px; border-radius: 5px; background: {{ lg.bg }}; border: 1.5px solid {{ lg.border }};"></span>
+              {{ lg.label }}
+            </span>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- SIDE SUMMARY -->
+      <aside data-anim style="animation: riseIn .5s cubic-bezier(.22,1,.36,1) both; animation-delay: .1s; flex: 0 0 300px; min-width: 260px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 24px; padding: 24px; box-shadow: 0 4px 24px rgba(11,31,38,.05); position: sticky; top: 88px;">
+        <h3 style="margin: 0 0 16px; font-size: 17px; font-weight: 800; letter-spacing: -0.01em;">Resumen</h3>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <sc-for list="{{ summary }}" as="s" hint-placeholder-count="3">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid #EEF2F3;">
+              <span style="font-size: 14px; font-weight: 600; color: #3E545C;">{{ s.label }}</span>
+              <span style="font-size: 15px; font-weight: 800; color: {{ s.color }};">{{ s.value }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 15px; padding: 13px; border-radius: 999px; box-shadow: 0 4px 16px rgba(12,86,120,.3); transition: background .2s ease;" style-hover="background: #0A465F; color: #FFFFFF;">
+          Consultar disponibilidad
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </a>
+      </aside>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer data-screen-label="Footer" style="background: #FFFFFF; border-top: 1px solid #DCE3E5; border-radius: 48px 48px 0 0; box-shadow: 0 -12px 40px rgba(11,31,38,.05); margin-top: 8px;">
+    <div style="max-width: 1120px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px 0; display: flex; gap: 48px; flex-wrap: wrap; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: #0C5678; display: grid; place-items: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+          </span>
+          <span style="font-weight: 800; letter-spacing: .04em; font-size: 15px;">MILOCATIVA</span>
+        </span>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6F8790;">Alquiler de inmuebles, maquinaria y servicios para la industria del shale en Añelo, Neuquén.</p>
+      </div>
+      <div style="display: flex; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Empresa</span>
+          <a href="MILOCATIVA Landing.dc.html#nosotros" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Nosotros</a>
+          <a href="MILOCATIVA Landing.dc.html#como-funciona" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Cómo funciona</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Contacto</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Catálogo</span>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Inmuebles</a>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Maquinaria</a>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Servicios</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Legal</span>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Términos</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Privacidad</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1120px; margin: 32px auto 0; padding: 20px 24px; border-top: 1px solid #DCE3E5; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #6F8790;">
+      <span>© 2026 MILOCATIVA. Todos los derechos reservados.</span>
+      <span>Hecho en Neuquén 🇦🇷</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { openUnit: null };
+
+  // ── Spanish content dictionary ──
+  dict() {
+    return {
+      building: {
+        name: 'Torre Añelo',
+        address: 'Av. San Martín 450, Añelo · Neuquén',
+        description: 'Edificio residencial de ocho unidades a metros del centro de Añelo, pensado para personal de operadoras y empresas de servicios de Vaca Muerta. Amueblado, con seguridad y cochera propia.',
+      },
+      statuses: {
+        available: { label: 'Disponible', bg: '#FFFFFF',                    text: '#3E545C', border: '#C9D3D6' },
+        requested: { label: 'Solicitado', bg: 'rgba(63,143,176,0.12)',      text: '#3E8FB0', border: 'rgba(63,143,176,0.30)' },
+        accepted:  { label: 'Aceptado',   bg: 'rgba(14,140,127,0.12)',      text: '#0E8C7F', border: 'rgba(14,140,127,0.30)' },
+        active:    { label: 'Activo',      bg: 'rgba(31,157,107,0.12)',     text: '#1F9D6B', border: 'rgba(31,157,107,0.30)' },
+        completed: { label: 'Completado',  bg: 'rgba(111,135,144,0.12)',    text: '#6F8790', border: 'rgba(111,135,144,0.30)' },
+        cancelled: { label: 'Cancelado',   bg: 'rgba(217,72,63,0.10)',      text: '#D9483F', border: 'rgba(217,72,63,0.28)' },
+        external:  { label: 'No publicado', bg: 'repeating-linear-gradient(45deg, #F2F5F6, #F2F5F6 6px, #E9EEEF 6px, #E9EEEF 12px)', text: '#9FB2B8', border: '#DCE3E5' },
+      },
+      legendOrder: ['available', 'requested', 'accepted', 'active', 'completed', 'external'],
+      // top floor first
+      floors: [
+        { label: '4°', units: [
+          { id: 'u4a', name: 'Depto 4A', status: 'available', price: '$480.000/mes', note: 'Disponible desde 01/08' },
+          { id: 'u4b', name: 'Depto 4B', status: 'requested', price: '$450.000/mes', note: 'Con solicitud pendiente' },
+        ]},
+        { label: '3°', units: [
+          { id: 'u3a', name: 'Depto 3A', status: 'active',    price: '$450.000/mes', note: 'Alquilado hasta 12/2026' },
+          { id: 'u3b', name: 'Depto 3B', status: 'external', price: 'Propietario particular', note: 'Unidad de otro dueño · no publicada en MILOCATIVA' },
+        ]},
+        { label: '2°', units: [
+          { id: 'u2a', name: 'Depto 2A', status: 'accepted',  price: '$440.000/mes', note: 'Reserva aceptada · ingreso 20/07' },
+          { id: 'u2b', name: 'Depto 2B', status: 'completed', price: '$440.000/mes', note: 'Contrato finalizado' },
+        ]},
+        { label: '1°', units: [
+          { id: 'u1a', name: 'Depto 1A', status: 'available', price: '$430.000/mes', note: 'Disponible de inmediato' },
+          { id: 'u1b', name: 'Depto 1B', status: 'external', price: 'Propietario particular', note: 'Unidad de otro dueño · no publicada en MILOCATIVA' },
+        ]},
+      ],
+      parking: [
+        { id: 'c1', name: 'C1', status: 'available', price: '$45.000/mes', note: 'Cochera cubierta · Disponible' },
+        { id: 'c2', name: 'C2', status: 'active',    price: '$45.000/mes', note: 'Ocupada · alquilada hasta 12/2026' },
+        { id: 'c3', name: 'C3', status: 'available', price: '$45.000/mes', note: 'Cochera cubierta · Disponible' },
+        { id: 'c4', name: 'C4', status: 'requested', price: '$45.000/mes', note: 'Con solicitud pendiente' },
+        { id: 'c5', name: 'C5', status: 'available', price: '$48.000/mes', note: 'Cochera doble · Disponible' },
+      ],
+    };
+  }
+
+  toggle(id) {
+    this.setState((s) => ({ openUnit: s.openUnit === id ? null : id }));
+  }
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const nav = this._nav && this._nav.current;
+      if (!nav) return;
+      const solid = window.scrollY > 24;
+      nav.style.backgroundColor = solid ? '#FFFFFF' : 'transparent';
+      nav.style.boxShadow = solid ? '0 8px 24px rgba(11,31,38,.06)' : 'none';
+      nav.style.borderBottomColor = solid ? '#DCE3E5' : 'transparent';
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  renderVals() {
+    const d = this.dict();
+    const st = d.statuses;
+    this._nav = this._nav || React.createRef();
+    const open = this.state.openUnit;
+
+    const mkUnit = (u) => {
+      const ext = u.status === 'external';
+      return {
+        name: u.name,
+        href: ext ? null : '#',
+        bg: st[u.status].bg,
+        border: st[u.status].border,
+        statusLabel: st[u.status].label,
+        statusColor: st[u.status].text,
+        price: u.price,
+        note: u.note,
+        cursor: ext ? 'default' : 'pointer',
+        hoverT: ext ? 'none' : 'translateY(-3px) scale(1.02)',
+        hoverS: ext ? 'none' : '0 12px 28px rgba(11,31,38,.14)',
+        open: open === u.id,
+        onEnter: ext ? null : () => this.setState({ openUnit: u.id }),
+        onLeave: ext ? null : () => this.setState((s) => (s.openUnit === u.id ? { openUnit: null } : null)),
+        onTap: ext ? (e) => e.preventDefault() : (e) => { e.preventDefault(); this.toggle(u.id); },
+      };
+    };
+
+    const floors = d.floors.map((f, i) => ({
+      label: f.label,
+      cols: `repeat(${f.units.length}, 1fr)`,
+      delay: (0.08 + i * 0.07).toFixed(2) + 's',
+      units: f.units.map(mkUnit),
+    }));
+
+    const parking = d.parking.map((p) => ({
+      name: p.name,
+      href: '#',
+      bg: st[p.status].bg,
+      border: st[p.status].border,
+      price: p.price,
+      note: p.note,
+      open: open === p.id,
+      onEnter: () => this.setState({ openUnit: p.id }),
+      onLeave: () => this.setState((s) => (s.openUnit === p.id ? { openUnit: null } : null)),
+      onTap: (e) => { e.preventDefault(); this.toggle(p.id); },
+    }));
+
+    const legend = d.legendOrder.map((k) => ({ label: st[k].label, bg: st[k].bg, border: st[k].border }));
+
+    // summary counts
+    const allUnits = d.floors.flatMap((f) => f.units);
+    const avail = allUnits.filter((u) => u.status === 'available').length;
+    const parkAvail = d.parking.filter((p) => p.status === 'available').length;
+    const summary = [
+      { label: 'Unidades totales', value: String(allUnits.length), color: '#0B1F26' },
+      { label: 'Disponibles ahora', value: String(avail), color: '#1F9D6B' },
+      { label: 'Cocheras libres', value: String(parkAvail), color: '#0C5678' },
+    ];
+
+    return {
+      navRef: this._nav,
+      building: d.building,
+      floors,
+      parking,
+      legend,
+      summary,
+      parkingDelay: (0.08 + d.floors.length * 0.07).toFixed(2) + 's',
+    };
+  }
+}
+</script>
+</body>
+</html>

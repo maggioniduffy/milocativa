@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F7F9FA; color: #0B1F26; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #0C5678; }
+    a:hover { color: #0A465F; }
+    ::selection { background: rgba(12,86,120,0.15); }
+    html { scroll-behavior: smooth; }
+    .rail { scrollbar-width: none; -ms-overflow-style: none; }
+    .rail::-webkit-scrollbar { width: 0; height: 0; display: none; }
+    @keyframes fanIn { from { opacity: 0; transform: translateY(12px) scale(.7); } to { opacity: 1; transform: none; } }
+  </style>
+</helmet>
+
+<div style="min-width: 360px; overflow-x: clip;">
+
+  <!-- NAVBAR -->
+  <header ref="{{ navRef }}" data-screen-label="Navbar" style="position: sticky; top: 0; z-index: 60; background: transparent; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: background-color .25s ease, box-shadow .25s ease, border-color .25s ease;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+      <a href="MILOCATIVA Landing.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0B1F26; flex: 0 0 auto;">
+        <span style="width: 36px; height: 36px; border-radius: 11px; background: #0C5678; display: grid; place-items: center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+        </span>
+        <span style="font-weight: 800; letter-spacing: .04em; font-size: 17px;">MILOCATIVA</span>
+      </a>
+
+      <!-- CENTER: nav links (top) ↔ compact search (scrolled) -->
+      <div style="flex: 1 1 auto; display: flex; justify-content: center; align-items: center; position: relative; min-height: 44px;">
+        <nav ref="{{ navLinksRef }}" style="display: flex; align-items: center; gap: 4px; transition: opacity .25s ease, transform .25s ease;">
+          <a href="MILOCATIVA Landing.dc.html" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Inicio</a>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #0B1F26; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; background: #EEF2F3; transition: background .15s ease;" style-hover="background: #E4EAEC;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Catálogo</a>
+          <a href="MILOCATIVA Landing.dc.html#como-funciona" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Cómo funciona</a>
+          <a href="MILOCATIVA Landing.dc.html#nosotros" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Nosotros</a>
+        </nav>
+        <!-- COMPACT SEARCH (appears in navbar on scroll) -->
+        <button ref="{{ compactRef }}" onClick="{{ scrollTop }}" style="position: absolute; opacity: 0; transform: translateY(10px); pointer-events: none; display: inline-flex; align-items: center; gap: 0; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 6px; cursor: pointer; font-family: inherit; box-shadow: 0 2px 10px rgba(11,31,38,.08); transition: opacity .25s ease, transform .25s ease, box-shadow .2s ease;" style-hover="box-shadow: 0 4px 16px rgba(11,31,38,.14);">
+          <span style="padding: 0 16px; font-weight: 700; font-size: 13.5px; color: #0B1F26; white-space: nowrap;">{{ activeTypeLabel }}</span>
+          <span style="width: 1px; height: 20px; background: #DCE3E5;"></span>
+          <span style="padding: 0 16px; font-weight: 600; font-size: 13.5px; color: #6F8790; white-space: nowrap;">Precio</span>
+          <span style="width: 1px; height: 20px; background: #DCE3E5;"></span>
+          <span style="padding: 0 14px; font-weight: 600; font-size: 13.5px; color: #6F8790; white-space: nowrap;">Buscar</span>
+          <span style="width: 32px; height: 32px; border-radius: 50%; background: #0C5678; display: grid; place-items: center; flex: 0 0 auto;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          </span>
+        </button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 10px; flex: 0 0 auto;">
+        <a href="#" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Perfil
+        </a>
+        <a href="#" style="display: inline-flex; align-items: center; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 14px; padding: 10px 20px; border-radius: 999px; box-shadow: 0 2px 8px rgba(12,86,120,.25); transition: background .2s ease, transform .1s ease;" style-hover="background: #0A465F; color: #FFFFFF;" style-active="transform: scale(.97);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Ingresar</a>
+      </div>
+    </div>
+
+    <!-- EXPANDED SEARCH + FILTERS (collapses up into navbar on scroll) -->
+    <div ref="{{ expandRef }}" data-screen-label="Búsqueda" style="overflow: hidden; max-height: 220px; opacity: 1; transition: max-height .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, transform .35s cubic-bezier(.22,1,.36,1);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 4px 24px 18px; display: flex; flex-direction: column; gap: 14px;">
+        <!-- search bar -->
+        <div style="display: flex; align-items: center; gap: 10px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 6px 6px 6px 20px; box-shadow: 0 2px 10px rgba(11,31,38,.05); max-width: 620px; width: 100%;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6F8790" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto;"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input type="text" placeholder="Buscar inmuebles, maquinaria o servicios en Añelo…" style="flex: 1; border: none; outline: none; background: transparent; font-family: inherit; font-size: 15px; font-weight: 500; color: #0B1F26; min-width: 0;">
+          <button style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; color: #FFFFFF; background: #0C5678; padding: 10px 20px; border-radius: 999px; transition: background .2s ease;" style-hover="background: #0A465F;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            Buscar
+          </button>
+        </div>
+        <!-- filters row -->
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 4px; flex-wrap: wrap;">
+            <sc-for list="{{ typeFilters }}" as="tf" hint-placeholder-count="4">
+              <button onClick="{{ tf.onClick }}" style="display: inline-flex; align-items: center; gap: 7px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 13.5px; padding: 8px 15px; border-radius: 999px; transition: background .15s ease, color .15s ease; background: {{ tf.bg }}; color: {{ tf.color }};" style-hover="filter: brightness(.97);">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ tf.dot }};"></span>
+                {{ tf.label }}
+              </button>
+            </sc-for>
+          </div>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 9px 16px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 13.5px; color: #3E545C; transition: border-color .15s ease;" style-hover="border-color: #C9D3D6; color: #0B1F26;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="4" y1="21" y2="14"></line><line x1="4" x2="4" y1="10" y2="3"></line><line x1="12" x2="12" y1="21" y2="12"></line><line x1="12" x2="12" y1="8" y2="3"></line><line x1="20" x2="20" y1="21" y2="16"></line><line x1="20" x2="20" y1="12" y2="3"></line><line x1="2" x2="6" y1="14" y2="14"></line><line x1="10" x2="14" y1="8" y2="8"></line><line x1="18" x2="22" y1="16" y2="16"></line></svg>
+            Precio
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 9px 16px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 13.5px; color: #3E545C; transition: border-color .15s ease;" style-hover="border-color: #C9D3D6; color: #0B1F26;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+            Duración
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 999px; padding: 9px 16px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 13.5px; color: #3E545C; transition: border-color .15s ease;" style-hover="border-color: #C9D3D6; color: #0B1F26;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Disponibilidad
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div style="flex: 1 1 auto;"></div>
+          <span style="font-size: 13px; font-weight: 600; color: #6F8790; white-space: nowrap;">{{ resultCount }} resultados</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px;">
+
+    <!-- EDIFICIOS RAIL -->
+    <section data-screen-label="Edificios" style="margin-bottom: 48px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px;">
+        <div>
+          <h2 style="margin: 0; font-size: clamp(22px, 2.6vw, 28px); font-weight: 800; letter-spacing: -0.02em;">Edificios</h2>
+          <p style="margin: 4px 0 0; font-size: 14.5px; color: #6F8790; font-weight: 500;">Propiedades con varias unidades bajo una misma administración</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <a href="#" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #0C5678; font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: rgba(12,86,120,0.10); color: #0A465F;">
+            Ver todos
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button onClick="{{ railPrev }}" aria-label="Anterior" style="width: 34px; height: 34px; border-radius: 50%; border: 1px solid #DCE3E5; background: #FFFFFF; cursor: pointer; display: grid; place-items: center; color: #0B1F26; transition: border-color .15s ease, background .15s ease, transform .1s ease;" style-hover="border-color: #0B1F26; background: #F7F9FA;" style-active="transform: scale(.92);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <button onClick="{{ railNext }}" aria-label="Siguiente" style="width: 34px; height: 34px; border-radius: 50%; border: 1px solid #DCE3E5; background: #FFFFFF; cursor: pointer; display: grid; place-items: center; color: #0B1F26; transition: border-color .15s ease, background .15s ease, transform .1s ease;" style-hover="border-color: #0B1F26; background: #F7F9FA;" style-active="transform: scale(.92);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div ref="{{ railRef }}" class="rail" style="display: flex; gap: 20px; overflow-x: auto; padding: 4px 4px 8px; scroll-snap-type: x mandatory; scroll-behavior: smooth;">
+        <sc-for list="{{ buildings }}" as="b" hint-placeholder-count="4">
+          <a href="{{ b.href }}" style="scroll-snap-align: start; flex: 0 0 320px; max-width: 320px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+            <div style="position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; background: {{ b.cover }}; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+              <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.94); color: #0C5678; font-weight: 700; font-size: 12.5px; padding: 6px 12px; border-radius: 999px; backdrop-filter: blur(4px); box-shadow: 0 1px 3px rgba(11,31,38,.12);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"></path><path d="M9 16h.01"></path><path d="M15 12h.01"></path><path d="M15 16h.01"></path><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+                {{ b.availableLabel }}
+              </span>
+              <button onClick="{{ b.toggleFav }}" aria-label="Favorito" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ b.heartFill }}" stroke="{{ b.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em;">{{ b.name }}</h3>
+              <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500; display: flex; align-items: center; gap: 5px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                {{ b.address }}
+              </p>
+            </div>
+          </a>
+        </sc-for>
+        <a href="#" style="scroll-snap-align: start; flex: 0 0 320px; max-width: 320px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+          <div style="position: relative; aspect-ratio: 3 / 2; border-radius: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #DCE3E5; box-shadow: 0 1px 4px rgba(11,31,38,.06); display: flex; align-items: center; justify-content: center; transition: box-shadow .2s ease, border-color .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18); border-color: #C9D3D6;">
+            <div style="position: relative; width: 120px; height: 92px;">
+              <div style="position: absolute; left: 6px; top: 14px; width: 74px; height: 58px; animation: fanIn .5s cubic-bezier(.34,1.56,.64,1) both; animation-delay: .1s;">
+                <div style="width: 100%; height: 100%; border-radius: 10px; background: linear-gradient(135deg, hsl(205 28% 46%), hsl(223 30% 40%)); box-shadow: 0 4px 12px rgba(11,31,38,.18); transform: rotate(-9deg);"></div>
+              </div>
+              <div style="position: absolute; right: 4px; top: 6px; width: 74px; height: 58px; animation: fanIn .5s cubic-bezier(.34,1.56,.64,1) both; animation-delay: .24s;">
+                <div style="width: 100%; height: 100%; border-radius: 10px; background: linear-gradient(135deg, hsl(168 28% 46%), hsl(186 30% 40%)); box-shadow: 0 4px 12px rgba(11,31,38,.18); transform: rotate(8deg);"></div>
+              </div>
+              <div style="position: absolute; left: 50%; top: 22px; width: 76px; height: 60px; margin-left: -38px; animation: fanIn .5s cubic-bezier(.34,1.56,.64,1) both; animation-delay: .38s;">
+                <div style="width: 100%; height: 100%; border-radius: 10px; background: linear-gradient(135deg, hsl(210 30% 50%), hsl(200 32% 42%)); box-shadow: 0 6px 16px rgba(11,31,38,.22); border: 2px solid #FFFFFF;"></div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: #0B1F26; text-decoration: underline; text-underline-offset: 3px;">
+            Mostrar todo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS GRID -->
+    <section data-screen-label="Productos">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px;">
+        <div>
+          <h2 style="margin: 0; font-size: clamp(22px, 2.6vw, 28px); font-weight: 800; letter-spacing: -0.02em;">Productos</h2>
+          <p style="margin: 4px 0 0; font-size: 14.5px; color: #6F8790; font-weight: 500;">Inmuebles, maquinaria, servicios y cocheras individuales</p>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px 20px;">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+          <a href="{{ p.href }}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+            <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: {{ p.cover }}; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+              <span style="position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 5px; font-weight: 700; font-size: 12px; padding: 5px 11px; border-radius: 999px; background: rgba(255,255,255,.94); color: {{ p.tagColor }}; backdrop-filter: blur(4px); box-shadow: 0 1px 3px rgba(11,31,38,.12);">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.tagColor }};"></span>
+                {{ p.tagLabel }}
+              </span>
+              <button onClick="{{ p.toggleFav }}" aria-label="Favorito" style="position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="{{ p.heartFill }}" stroke="{{ p.heartStroke }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+                <h3 style="margin: 0; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3;">{{ p.title }}</h3>
+                <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                  {{ p.rating }}
+                </span>
+              </div>
+              <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">{{ p.location }}</p>
+              <sc-if value="{{ p.hasParking }}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; margin-top: 2px; font-weight: 700; font-size: 11.5px; padding: 3px 9px; border-radius: 999px; background: rgba(12,86,120,0.10); color: #0C5678;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 17V7h4a3 3 0 0 1 0 6H9"></path></svg>
+                  Con cochera disponible
+                </span>
+              </sc-if>
+              <div style="margin-top: 3px; display: flex; align-items: baseline; gap: 4px;">
+                <span style="font-size: 15px; font-weight: 800; color: #0B1F26; letter-spacing: -0.01em;">{{ p.price }}</span>
+                <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">{{ p.unit }}</span>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer data-screen-label="Footer" style="background: #FFFFFF; border-top: 1px solid #DCE3E5; border-radius: 48px 48px 0 0; box-shadow: 0 -12px 40px rgba(11,31,38,.05); margin-top: 8px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px 0; display: flex; gap: 48px; flex-wrap: wrap; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: #0C5678; display: grid; place-items: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+          </span>
+          <span style="font-weight: 800; letter-spacing: .04em; font-size: 15px;">MILOCATIVA</span>
+        </span>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6F8790;">Alquiler de inmuebles, maquinaria y servicios para la industria del shale en Añelo, Neuquén.</p>
+      </div>
+      <div style="display: flex; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Empresa</span>
+          <a href="MILOCATIVA Landing.dc.html#nosotros" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Nosotros</a>
+          <a href="MILOCATIVA Landing.dc.html#como-funciona" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Cómo funciona</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Contacto</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Catálogo</span>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Inmuebles</a>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Maquinaria</a>
+          <a href="Catalogo.dc.html" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Servicios</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Legal</span>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Términos</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Privacidad</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 32px auto 0; padding: 20px 24px; border-top: 1px solid #DCE3E5; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #6F8790;">
+      <span>© 2026 MILOCATIVA. Todos los derechos reservados.</span>
+      <span>Hecho en Neuquén 🇦🇷</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { activeType: 'all', favorites: {} };
+
+  toggleFav(id, e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    this.setState((s) => ({ favorites: Object.assign({}, s.favorites, { [id]: !s.favorites[id] }) }));
+  }
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const nav = this._nav && this._nav.current;
+      const exp = this._expand && this._expand.current;
+      const cmp = this._compact && this._compact.current;
+      const lnk = this._navLinks && this._navLinks.current;
+      const solid = window.scrollY > 40;
+      if (nav) {
+        nav.style.backgroundColor = solid ? '#FFFFFF' : 'transparent';
+        nav.style.boxShadow = solid ? '0 8px 24px rgba(11,31,38,.06)' : 'none';
+        nav.style.borderBottomColor = solid ? '#DCE3E5' : 'transparent';
+      }
+      if (exp) {
+        exp.style.maxHeight = solid ? '0px' : '220px';
+        exp.style.opacity = solid ? '0' : '1';
+        exp.style.transform = solid ? 'translateY(-10px)' : 'none';
+      }
+      if (cmp) {
+        cmp.style.opacity = solid ? '1' : '0';
+        cmp.style.transform = solid ? 'none' : 'translateY(10px)';
+        cmp.style.pointerEvents = solid ? 'auto' : 'none';
+      }
+      if (lnk) {
+        lnk.style.opacity = solid ? '0' : '1';
+        lnk.style.transform = solid ? 'translateY(-10px)' : 'none';
+        lnk.style.pointerEvents = solid ? 'none' : 'auto';
+      }
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  // ── Spanish content dictionary (kept separate from logic for later extraction) ──
+  dict() {
+    return {
+      types: [
+        { id: 'all', label: 'Todos' },
+        { id: 'estate', label: 'Inmuebles' },
+        { id: 'machinery', label: 'Maquinaria' },
+        { id: 'service', label: 'Servicios' },
+        { id: 'parking', label: 'Cocheras' },
+      ],
+      tags: {
+        estate:    { label: 'Inmueble',  bg: 'rgba(12,86,120,0.12)',  color: '#0C5678', border: 'none' },
+        machinery: { label: 'Maquinaria', bg: 'rgba(217,143,42,0.14)', color: '#B57614', border: 'none' },
+        service:   { label: 'Servicio',  bg: 'rgba(14,140,127,0.12)',  color: '#0E8C7F', border: 'none' },
+        parking:   { label: 'Cochera',   bg: 'transparent',            color: '#0C5678', border: '1.5px solid #0C5678' },
+      },
+      buildings: [
+        { slug: 'torre-aelo', name: 'Torre Añelo', address: 'Av. San Martín 450, Añelo', available: 3, total: 8, hue: 205 },
+        { slug: 'residencial-shale', name: 'Residencial Shale', address: 'Los Álamos 120, Añelo', available: 5, total: 12, hue: 170 },
+        { slug: 'complejo-neuquen', name: 'Complejo Neuquén', address: 'Ruta 7 Km 12, Añelo', available: 2, total: 6, hue: 200 },
+        { slug: 'edificio-vaca-muerta', name: 'Edificio Vaca Muerta', address: 'Calle 9 y 20, Añelo', available: 7, total: 10, hue: 155 },
+        { slug: 'mirador-del-valle', name: 'Mirador del Valle', address: 'Los Nogales 88, Añelo', available: 1, total: 9, hue: 210 },
+      ],
+      products: [
+        { id: 'e1', type: 'estate',    title: 'Departamento 2 amb. amoblado', location: 'Centro, Añelo', price: '$420.000', unit: '/mes', hue: 205, hasParking: true,  rating: '4,9' },
+        { id: 'm1', type: 'machinery', title: 'Retroexcavadora CAT 320', location: 'Parque Industrial', price: '$180.000', unit: '/día', hue: 40, hasParking: false, rating: '4,8' },
+        { id: 's1', type: 'service',   title: 'Catering para campamento', location: 'Zona rural, Añelo', price: '$95.000', unit: '/servicio', hue: 168, hasParking: false, rating: '5,0' },
+        { id: 'p1', type: 'parking',   title: 'Cochera cubierta individual', location: 'Barrio Norte', price: '$45.000', unit: '/mes', hue: 200, hasParking: false, rating: '4,7' },
+        { id: 'e2', type: 'estate',    title: 'Casa 3 dormitorios con patio', location: 'Barrio Sur, Añelo', price: '$680.000', unit: '/mes', hue: 190, hasParking: false, rating: '4,9' },
+        { id: 'm2', type: 'machinery', title: 'Camión hidrogrúa 12 tn', location: 'Parque Industrial', price: '$240.000', unit: '/día', hue: 35, hasParking: false, rating: '4,6' },
+        { id: 'e3', type: 'estate',    title: 'Monoambiente equipado', location: 'Centro, Añelo', price: '$310.000', unit: '/mes', hue: 210, hasParking: true,  rating: '4,8' },
+        { id: 's2', type: 'service',   title: 'Transporte de personal', location: 'Añelo · Vaca Muerta', price: '$130.000', unit: '/día', hue: 160, hasParking: false, rating: '4,9' },
+      ],
+    };
+  }
+
+  cover(hue, dark) {
+    const c = dark ? 32 : 46;
+    return `linear-gradient(135deg, hsl(${hue} ${dark?28:34}% ${dark?38:74}%), hsl(${hue+18} 30% ${c}%))`;
+  }
+
+  renderVals() {
+    const d = this.dict();
+    const active = this.state.activeType;
+    this._nav = this._nav || React.createRef();
+    this._expand = this._expand || React.createRef();
+    this._compact = this._compact || React.createRef();
+    this._navLinks = this._navLinks || React.createRef();
+    this._rail = this._rail || React.createRef();
+    const activeTypeLabel = (d.types.find((t) => t.id === active) || d.types[0]).label;
+
+    const typeColors = {
+      all: '#0C5678', estate: '#0C5678', machinery: '#B57614', service: '#0E8C7F', parking: '#3E8FB0',
+    };
+    const typeFilters = d.types.map((t) => {
+      const on = t.id === active;
+      const c = typeColors[t.id];
+      return {
+        label: t.label,
+        dot: c,
+        bg: on ? c : 'transparent',
+        color: on ? '#FFFFFF' : '#3E545C',
+        onClick: () => this.setState({ activeType: t.id }),
+      };
+    });
+
+    const buildings = d.buildings.map((b) => {
+      const fav = !!this.state.favorites['b_' + b.slug];
+      return {
+        name: b.name,
+        address: b.address,
+        availableLabel: `${b.available} disponibles de ${b.total}`,
+        href: `Edificio.dc.html`,
+        cover: this.cover(b.hue, true),
+        heartFill: fav ? '#D9483F' : 'rgba(11,31,38,.28)',
+        heartStroke: fav ? '#D9483F' : '#FFFFFF',
+        toggleFav: (e) => this.toggleFav('b_' + b.slug, e),
+      };
+    });
+
+    const shown = active === 'all' ? d.products : d.products.filter((p) => p.type === active);
+    const products = shown.map((p) => {
+      const tag = d.tags[p.type];
+      const fav = !!this.state.favorites[p.id];
+      return {
+        title: p.title,
+        location: p.location,
+        price: p.price,
+        unit: p.unit,
+        rating: p.rating,
+        hasParking: p.type === 'estate' && p.hasParking,
+        href: '#',
+        cover: this.cover(p.hue, false),
+        tagLabel: tag.label,
+        tagColor: tag.color,
+        heartFill: fav ? '#D9483F' : 'rgba(11,31,38,.28)',
+        heartStroke: fav ? '#D9483F' : '#FFFFFF',
+        toggleFav: (e) => this.toggleFav(p.id, e),
+      };
+    });
+
+    return {
+      navRef: this._nav,
+      expandRef: this._expand,
+      compactRef: this._compact,
+      navLinksRef: this._navLinks,
+      railRef: this._rail,
+      railPrev: () => { const r = this._rail.current; if (r) r.scrollBy({ left: -680, behavior: 'smooth' }); },
+      railNext: () => { const r = this._rail.current; if (r) r.scrollBy({ left: 680, behavior: 'smooth' }); },
+      activeTypeLabel,
+      scrollTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      typeFilters,
+      buildings,
+      products,
+      resultCount: shown.length,
+    };
+  }
+}
+</script>
+</body>
+</html>

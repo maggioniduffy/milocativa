@@ -58,3 +58,5 @@
 - `app/(public)/`, `app/(app)/`, `app/admin/` — route groups matching the access boundaries defined in `architecture-context.md`.
 - `supabase/migrations/` — versioned SQL migrations, including RLS policies, committed alongside the code that depends on them.
 - Name files after the responsibility they contain, not the technology.
+- `components/map/` — MapLibre map view, markers, hover cards.
+- `components/building/` — building floor/unit visualization.

@@ -34,16 +34,21 @@ The UI is entirely in **Spanish** (the language of the target users — oilfield
 
 ### Starter System Designs
 
-- Item taxonomy: `Item` splits into `Object` (physical, has location/condition — `Estate`, `Machinery`) and `Service` (has type/duration). This split drives which filters and fields render per listing type.
+- Item taxonomy: `Item` splits into `Object` (physical, has location/condition — `Estate`, `Machinery`, `ParkingSpot`) and `Service` (has type/duration). This split drives which filters and fields render per listing type.
+- `ParkingSpot` is a standalone rentable `Object`: it can be listed and rented independently, or bundled into the same rental as an `Estate` (e.g. an apartment + its assigned parking spot).
+- `Estate`s (and `ParkingSpot`s) can optionally belong to a `Building`, which groups multiple units under one property and powers an interactive building view (floor/unit picker) on that building's page.
 - Every item carries an `Availability` calendar (date ranges), independent of its `Listing` (public visibility/publication status).
 - Every conversation is scoped to a single `Item`, not to a user-to-user thread — this is the organizing principle for how admins triage and manage clients.
-- `Rental` is the transactional core: it tracks status through the request → accepted → active → completed lifecycle and is the anchor for payments and reviews.
+- `Rental` is the transactional core: it tracks status through the request → accepted → active → completed lifecycle, can include more than one `Item` (bundled rentals), and is the anchor for payments and reviews.
 
 ## Scope
 
 ### In Scope
 
 - Public catalog with search, filters (type, price, contract duration, availability), and item detail pages.
+- Interactive map view of estate listings, with hover interactions on property markers.
+- Building grouping: an interactive view of a building's units, reachable from any estate that belongs to it.
+- Parking spots (cocheras) as a rentable item type, listable standalone or bundled with an estate in the same rental request.
 - Item-scoped chat between prospective/active renters and admins, with full history.
 - Admin panel: manage listings, respond to inquiries, accept/decline requests, publish new items.
 - In-app notifications, web push notifications, and transactional email.

@@ -40,12 +40,18 @@ Build out the public catalog (`/catalogo`) that the landing page links to.
 - Tailwind v4 CSS-first config (no tailwind.config.js) — all theme tokens live in globals.css via @theme inline.
 - shadcn/ui components live in components/ui/ and must not be modified after installation.
 - Light-only theme: petrol-blue (#0C5678) primary accent, teal and sky secondary accents; no .dark class toggle needed.
-- Next.js 16 uses proxy.ts (not middleware.ts) — the middleware file convention was renamed in v16.
+- Next.js 16 us- Hero trust stats ("+120 activos disponibles") are filler numbers from the design brief; replace with real counts once the catalog is live.
+  es proxy.ts (not middleware.ts) — the middleware file convention was renamed in v16.
 - No Prisma/ORM: Supabase Postgres accessed directly via RLS-scoped Supabase clients (browser and server), authorized through the Clerk JWT forwarded as the Authorization header.
 - Role (admin | user) lives in Clerk publicMetadata, not a database table; RLS policies read it via auth.jwt() -> 'public_metadata' ->> 'role'.
 - File storage (item photos, documents) uses Supabase Storage, not Vercel Blob.
 - Realtime chat and in-app notifications use Supabase Realtime, not a third-party collaboration service.
 - Payments: Stripe and MercadoPago, reconciled via verified webhooks in app/api; payment status is never set client-side.
+- Maps: MapLibre GL JS + open vector tiles (not Google Maps / Mapbox) — custom "keen style" achieved by editing the vector style JSON directly with project design tokens, no per-request cost.
+- ParkingSpot (cochera) is a new ObjectItem subtype — rentable standalone or bundled with an Estate in the same Rental.
+- Building groups Estates and ParkingSpots via an optional buildingId (nullable — standalone properties don't need a Building record).
+- Rental no longer maps 1:1 to a single Item — bundled rentals go through a rental_items join table; always read/write through it, never through a single itemId on Rental.
+- Estate carries latitude/longitude, captured at listing creation/edit time, as the source of truth for map markers.
 
 ## Session Notes
 

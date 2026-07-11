@@ -46,6 +46,7 @@ export const homeContent = {
       estate: "Inmuebles",
       machinery: "Maquinaria",
       service: "Servicios",
+      parking: "Cocheras",
     } satisfies Record<Category, string>,
     categories: [
       {

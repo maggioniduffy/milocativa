@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, HardHat, Truck, type LucideIcon } from "lucide-react";
+import { Building2, HardHat, SquareParking, Truck, type LucideIcon } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import type { HomeCategoryCard } from "@/content/home";
@@ -9,6 +9,7 @@ const categoryIcons: Record<Category, LucideIcon> = {
   estate: Building2,
   machinery: Truck,
   service: HardHat,
+  parking: SquareParking,
 };
 
 interface CategoryCardProps {

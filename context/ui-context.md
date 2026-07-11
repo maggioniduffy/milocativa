@@ -60,6 +60,27 @@ Radius increases with surface depth — smaller for inline elements, larger for 
 
 Instead of a canvas node palette, the domain-specific visual system here is **category tagging** (what kind of item) and **status badges** (where a rental stands). Both are defined in `types/domain.ts` as `CATEGORY_COLORS` and `RENTAL_STATUS_COLORS`.
 
+## Map Style
+
+The property map uses a minimal "keen style" vector map — low-detail, low-noise, consistent with the rest of the light theme. Defined as a MapLibre style JSON in `lib/map/style.ts`.
+
+| Map element       | Token / Value                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| Land background   | `--bg-subtle`                                                                                  |
+| Water             | `--accent-primary-dim`                                                                         |
+| Major streets     | `--border-subtle`                                                                              |
+| Minor streets     | `--border-default` (thinner stroke)                                                            |
+| Labels            | `--text-muted`, small size, sparse                                                             |
+| Marker (default)  | `--accent-primary` pin, white icon                                                             |
+| Marker (hover)    | `--accent-primary-hover`, scales up ~1.15x with a spring transition, elevates with `shadow-md` |
+| Marker (selected) | `--accent-teal` pin, stays elevated while its listing card is open                             |
+
+No satellite imagery, no 3D buildings, no traffic layers — the map is a lightweight locator, not a navigation tool. Zoom is constrained to the Añelo / Vaca Muerta area by default.
+
+## Building Visualization
+
+A building's page shows an interactive floor/unit diagram: a simple stacked-floor layout where each unit is a clickable block colored by its `Listing`/`Rental` status (reusing `RENTAL_STATUS_COLORS`). Hovering a unit reveals a compact popover with title, price, and availability; clicking opens the item detail page. Layout is vertical on mobile (floors stack top to bottom, scrollable) and can show floors side-by-side on desktop when the building is small enough.
+
 ### Category colors
 
 | Category  | Fill (dim)                 | Text color | Character                 |

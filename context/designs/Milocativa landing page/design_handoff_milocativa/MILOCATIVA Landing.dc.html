@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Instrument+Serif:ital@1&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F7F9FA; color: #0B1F26; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #0C5678; }
+    a:hover { color: #0A465F; }
+    ::selection { background: rgba(12,86,120,0.15); }
+    @keyframes glowRipple { from { transform: scale(.35); opacity: .7; } to { transform: scale(1.2); opacity: 0; } }
+    @keyframes bgDrift1 { from { transform: translate(0, 0) scale(1); } to { transform: translate(6vw, 8vh) scale(1.25); } }
+    @keyframes bgDrift2 { from { transform: translate(0, 0) scale(1.2); } to { transform: translate(-7vw, -6vh) scale(.95); } }
+    html { scroll-behavior: smooth; }
+  </style>
+</helmet>
+
+<div style="min-width: 360px; overflow-x: clip;">
+
+  <!-- BACKGROUND LAYER: topographic canvas (behind all content) -->
+  <div style="position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden;">
+    <div style="position: absolute; top: -15%; left: -10%; width: 55vw; height: 55vw; border-radius: 50%; background: radial-gradient(circle, rgba(14,140,127,.06) 0%, transparent 65%);"></div>
+    <x-import component-from-global-scope="topo-bg" from="./topo-bg.js" hint-size="100%,100%" style="position: absolute; inset: 0;"></x-import>
+  </div>
+
+  <!-- NAVBAR -->
+  <header ref="{{ navRef }}" data-screen-label="Navbar" style="position: sticky; top: 0; z-index: 50; background: transparent; transition: background-color .2s ease, box-shadow .2s ease, border-color .2s ease; border-bottom: 1px solid transparent;">
+    <div style="max-width: 1160px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <a href="#" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #0B1F26;">
+        <span style="width: 32px; height: 32px; border-radius: 10px; background: #0C5678; display: grid; place-items: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+        </span>
+        <span style="font-weight: 800; letter-spacing: .04em; font-size: 17px;">MILOCATIVA</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+        <a href="#" style="text-decoration: none; color: #0B1F26; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Inicio</a>
+        <a href="#catalogo" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Catálogo</a>
+        <a href="#como-funciona" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Cómo funciona</a>
+        <a href="#nosotros" style="text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Nosotros</a>
+      </nav>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <a href="#" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #3E545C; font-weight: 600; font-size: 14px; padding: 8px 12px; border-radius: 999px; transition: background .15s ease;" style-hover="background: #EEF2F3; color: #0B1F26;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Perfil
+        </a>
+        <a href="#" style="display: inline-flex; align-items: center; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 14px; padding: 10px 20px; border-radius: 999px; transition: background .2s ease, transform .1s ease; box-shadow: 0 2px 8px rgba(12,86,120,.25);" style-hover="background: #0A465F; color: #FFFFFF;" style-active="transform: scale(.97);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Ingresar</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section data-screen-label="Hero" style="position: relative; overflow: hidden;">
+    <sc-if value="{{ showGrain }}" hint-placeholder-val="{{ true }}">
+      <div style="position: absolute; inset: 0; pointer-events: none; opacity: .04; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E&quot;);"></div>
+    </sc-if>
+    <div style="position: absolute; top: -120px; right: -80px; width: 720px; height: 720px; border-radius: 50%; background: radial-gradient(circle, rgba(12,86,120,0.10) 0%, rgba(12,86,120,0.04) 45%, transparent 70%); pointer-events: none;"></div>
+    <div style="max-width: 1160px; margin: 0 auto; padding: clamp(48px, 8vw, 96px) 24px clamp(56px, 8vw, 104px); display: flex; align-items: center; gap: clamp(32px, 5vw, 72px); flex-wrap: wrap; position: relative;">
+      <div style="flex: 1 1 420px; min-width: 300px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px;">
+        <span data-reveal="up" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(12,86,120,0.10); color: #0C5678; font-weight: 700; font-size: 13px; padding: 7px 16px; border-radius: 999px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          Alquileres en Añelo · Vaca Muerta
+        </span>
+        <h1 data-reveal="up" data-reveal-delay="80" style="margin: 0; font-size: clamp(34px, 4.6vw, 56px); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance;">Inmuebles, maquinaria y servicios para la industria del shale</h1>
+        <p data-reveal="up" data-reveal-delay="160" style="margin: 0; max-width: 540px; font-size: clamp(16px, 1.5vw, 18px); line-height: 1.6; color: #3E545C; text-wrap: pretty;">Conectamos a operadoras y empresas de servicios de Vaca Muerta con propiedades, equipos y servicios listos para alquilar en Añelo y la región del Neuquén.</p>
+        <div data-reveal="up" data-reveal-delay="240" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+          <a href="#catalogo" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 16px; padding: 14px 28px; border-radius: 999px; transition: background .2s ease, transform .1s ease; box-shadow: 0 4px 16px rgba(12,86,120,.3);" style-hover="background: #0A465F; color: #FFFFFF;" style-active="transform: scale(.97);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">
+            Explorar catálogo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+          <a href="#como-funciona" style="display: inline-flex; align-items: center; text-decoration: none; background: transparent; color: #0B1F26; font-weight: 700; font-size: 16px; padding: 14px 28px; border-radius: 999px; border: 1.5px solid #DCE3E5; transition: background .2s ease, border-color .2s ease, transform .1s ease;" style-hover="background: #EEF2F3; border-color: #C9D3D6; color: #0B1F26;" style-active="transform: scale(.97);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">Cómo funciona</a>
+        </div>
+        <div data-reveal="up" data-reveal-delay="320" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 14px; font-weight: 600; color: #6F8790;">
+          <span>+120 activos disponibles</span>
+          <span style="width: 4px; height: 4px; border-radius: 50%; background: #C9D3D6;"></span>
+          <span>3 categorías</span>
+          <span style="width: 4px; height: 4px; border-radius: 50%; background: #C9D3D6;"></span>
+          <span>Gestión 100% local</span>
+        </div>
+      </div>
+      <div data-reveal="scale" data-reveal-delay="150" style="flex: 1 1 380px; min-width: 300px; position: relative;">
+        <div style="position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 24px 64px rgba(11,31,38,.16), 0 4px 16px rgba(11,31,38,.08); height: clamp(300px, 34vw, 440px); background: #EEF2F3;">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hero-photo" shape="rect" placeholder="Foto industrial · Vaca Muerta" hint-size="100%,100%" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="nosotros" data-screen-label="Nosotros" style="padding: clamp(8px, 2vw, 24px) 24px 0;">
+    <div data-reveal="stack" style="max-width: 1160px; margin: 0 auto; perspective: 1400px;" onMouseEnter="{{ aboutEnter }}" onMouseLeave="{{ aboutLeave }}">
+      <div style="position: relative; min-height: clamp(300px, 32vw, 380px); transform-style: preserve-3d; transition: transform .7s cubic-bezier(.22,1,.36,1); transform: {{ aboutTransform }};">
+        <div style="position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #F4F8F9; border-radius: clamp(28px, 4vw, 48px); overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <div style="position: absolute; top: -140px; left: -140px; width: 380px; height: 380px; border-radius: 50%; background: radial-gradient(circle, rgba(12,86,120,0.10), transparent 70%);"></div>
+          <div style="position: absolute; bottom: -160px; right: -120px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(14,140,127,0.12), transparent 70%);"></div>
+          <h2 style="margin: 0; padding: 24px; position: relative; font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; letter-spacing: -0.01em; text-wrap: balance; text-transform: none; text-align: center;"><span style="font-weight: 800; letter-spacing: .01em;">Una empresa local</span> <em style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-style: italic; color: #6F8790; letter-spacing: 0;">para un negocio exigente</em></h2>
+        </div>
+        <div style="position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateX(180deg); background: #FFFFFF; border-radius: clamp(28px, 4vw, 48px); overflow: hidden; box-shadow: 0 24px 64px rgba(11,31,38,.10); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 14px; padding: clamp(28px, 5vw, 56px);">
+          <h3 style="margin: 0; font-size: clamp(20px, 2.4vw, 28px); font-weight: 800; letter-spacing: -0.01em; text-align: left;"><span style="font-weight: 800; letter-spacing: .01em;">Una empresa local</span> <em style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-style: italic; color: #6F8790; letter-spacing: 0;">para un negocio exigente</em></h3>
+          <p style="margin: 0; max-width: 760px; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.7; color: #3E545C; text-wrap: pretty; text-align: left;">MILOCATIVA es una empresa de Añelo especializada en el alquiler de activos para el petróleo y gas no convencional. Desde alojamientos y galpones hasta maquinaria pesada y servicios operativos, gestionamos cada contrato de forma simple, transparente y confiable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG PREVIEW -->
+  <section id="catalogo" data-screen-label="Catálogo" style="max-width: 1160px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px;">
+    <div data-reveal="up" style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 32px;">
+      <h2 style="margin: 0; font-size: clamp(26px, 3vw, 36px); font-weight: 800; letter-spacing: -0.02em;">Explorá el catálogo</h2>
+      <a href="#" style="text-decoration: none; color: #0C5678; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 6px;" style-hover="color: #0A465F;" style-focus="outline: 2px solid #0C5678; outline-offset: 2px; border-radius: 6px;">
+        Ver todo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+      </a>
+    </div>
+
+    <div data-reveal="children" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 48px;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease; box-shadow: 0 2px 8px rgba(11,31,38,.05);" style-hover="transform: translateY(-5px); box-shadow: 0 12px 32px rgba(11,31,38,.12);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="width: 48px; height: 48px; border-radius: 14px; background: rgba(12,86,120,0.10); color: #0C5678; display: grid; place-items: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+        </span>
+          <h3 style="margin: 0; font-size: 19px; font-weight: 700;">Inmuebles</h3>
+        </div>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #6F8790;">Alojamientos para personal, oficinas y galpones listos para operar en Añelo.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease; box-shadow: 0 2px 8px rgba(11,31,38,.05);" style-hover="transform: translateY(-5px); box-shadow: 0 12px 32px rgba(11,31,38,.12);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="width: 48px; height: 48px; border-radius: 14px; background: rgba(217,142,30,0.12); color: #B8720F; display: grid; place-items: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg>
+        </span>
+          <h3 style="margin: 0; font-size: 19px; font-weight: 700;">Maquinaria</h3>
+        </div>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #6F8790;">Equipos pesados y vehículos para el yacimiento, con o sin operador.</p>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s ease; box-shadow: 0 2px 8px rgba(11,31,38,.05);" style-hover="transform: translateY(-5px); box-shadow: 0 12px 32px rgba(11,31,38,.12);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="width: 48px; height: 48px; border-radius: 14px; background: rgba(14,140,127,0.10); color: #0E8C7F; display: grid; place-items: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z"></path><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"></path><path d="M4 15v-3a6 6 0 0 1 6-6"></path><path d="M14 6a6 6 0 0 1 6 6v3"></path></svg>
+        </span>
+          <h3 style="margin: 0; font-size: 19px; font-weight: 700;">Servicios</h3>
+        </div>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.55; color: #6F8790;">Catering, logística e izaje: servicios operativos gestionados localmente.</p>
+      </div>
+    </div>
+
+    <div data-reveal="children" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px 20px;">
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-1" shape="rect" placeholder="Foto del inmueble" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #0C5678; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0C5678;"></span>Inmuebles</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Casa para personal · 3 dormitorios</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4,98</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$450.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ mes</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #1F9D6B;">Disponible ahora</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-2" shape="rect" placeholder="Foto del galpón" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #0C5678; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0C5678;"></span>Inmuebles</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Galpón logístico 600 m²</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4,81</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$1.200.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ mes</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #1F9D6B;">Disponible ahora</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-3" shape="rect" placeholder="Foto de la máquina" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #B8720F; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #B8720F;"></span>Maquinaria</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Retroexcavadora CAT 420F</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4,89</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$2.800.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ mes</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #D98E1E;">Desde 01/08/2026</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-4" shape="rect" placeholder="Foto del vehículo" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #B8720F; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #B8720F;"></span>Maquinaria</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Camioneta 4x4 doble cabina</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>5,0</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$950.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ mes</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #1F9D6B;">Disponible ahora</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-5" shape="rect" placeholder="Foto del servicio" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #0E8C7F; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0E8C7F;"></span>Servicios</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Catering para campamento · 40 pax</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4,79</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$3.500.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ mes</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #1F9D6B;">Cupos disponibles</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="Catalogo.dc.html" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: transform .2s cubic-bezier(.22,1,.36,1);" style-hover="transform: translateY(-5px);">
+        <div style="position: relative; aspect-ratio: 1 / 0.92; border-radius: 16px; overflow: hidden; background: #EEF2F3; box-shadow: 0 1px 4px rgba(11,31,38,.06); transition: box-shadow .2s ease;" style-hover="box-shadow: 0 14px 32px rgba(11,31,38,.18);">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="listing-6" shape="rect" placeholder="Foto de la grúa" hint-size="100%,170px" style="position: absolute; inset: 0; width: 100%; height: 100%;"></x-import>
+          <span style="position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,.94); color: #0E8C7F; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; box-shadow: 0 1px 3px rgba(11,31,38,.12);"><span style="width: 7px; height: 7px; border-radius: 50%; background: #0E8C7F;"></span>Servicios</span>
+          <button aria-label="Favorito" onClick="{{ noop }}" style="position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer; background: rgba(255,255,255,.55); backdrop-filter: blur(4px); display: grid; place-items: center; transition: background .15s ease, transform .1s ease;" style-hover="background: rgba(255,255,255,.85);" style-active="transform: scale(.9);">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="rgba(11,31,38,.28)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.49 4.04 3 5.5l7 7Z"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 3px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <h4 style="margin: 0; font-size: 15px; font-weight: 700; line-height: 1.3;">Izaje con grúa 30 t · con operador</h4>
+            <span style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 600; color: #0B1F26;"><svg width="13" height="13" viewBox="0 0 24 24" fill="#0B1F26" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>4,9</span>
+          </div>
+          <p style="margin: 0; font-size: 13px; color: #6F8790; font-weight: 500;">Añelo, Neuquén</p>
+          <div style="margin-top: 3px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+            <span style="font-size: 15px; font-weight: 800;">$180.000 <span style="font-size: 12.5px; font-weight: 600; color: #6F8790;">/ día</span></span>
+            <span style="font-size: 12px; font-weight: 600; color: #1F9D6B;">Disponible ahora</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div data-reveal="up" style="margin-top: 32px;">
+      <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; background: #0C5678; color: #FFFFFF; font-weight: 700; font-size: 16px; padding: 15px 28px; border-radius: 999px; transition: background .2s ease, transform .1s ease; box-shadow: 0 4px 16px rgba(12,86,120,.25);" style-hover="background: #0A465F; color: #FFFFFF;" style-active="transform: scale(.98);" style-focus="outline: 2px solid #0C5678; outline-offset: 2px;">
+        Ir al catálogo
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="como-funciona" data-screen-label="Cómo funciona" style="padding: 0 24px clamp(48px, 7vw, 88px);">
+    <div data-reveal="stack" style="max-width: 1160px; margin: 0 auto; background: #FFFFFF; border: 1px solid #DCE3E5; border-radius: clamp(28px, 4vw, 48px); box-shadow: 0 24px 64px rgba(11,31,38,.08); padding: clamp(40px, 6vw, 72px) clamp(24px, 5vw, 64px); position: relative; overflow: hidden;">
+      <div style="position: absolute; top: -160px; right: -140px; width: 420px; height: 420px; border-radius: 50%; background: radial-gradient(circle, rgba(12,86,120,0.08), transparent 70%);"></div>
+      <h2 data-reveal="up" style="margin: 0 0 40px; font-size: clamp(26px, 3vw, 36px); font-weight: 800; letter-spacing: -0.02em;">Cómo funciona</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 28px;">
+        <div data-reveal="up" data-reveal-delay="0" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(12,86,120,0.10); color: #0C5678; display: grid; place-items: center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            </span>
+            <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .08em;">01</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Explorá el catálogo</h3>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #6F8790;">Filtrá por tipo, precio, plazo de contrato y disponibilidad.</p>
+        </div>
+        <div data-reveal="up" data-reveal-delay="100" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(12,86,120,0.10); color: #0C5678; display: grid; place-items: center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+            </span>
+            <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .08em;">02</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Enviá tu solicitud</h3>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #6F8790;">Contactá desde cada publicación. Toda la comunicación queda organizada por ítem.</p>
+        </div>
+        <div data-reveal="up" data-reveal-delay="200" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(12,86,120,0.10); color: #0C5678; display: grid; place-items: center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+            </span>
+            <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .08em;">03</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Confirmá y coordiná</h3>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #6F8790;">El equipo revisa y acepta tu solicitud, y coordinan el inicio del alquiler.</p>
+        </div>
+        <div data-reveal="up" data-reveal-delay="300" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(12,86,120,0.10); color: #0C5678; display: grid; place-items: center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+            </span>
+            <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .08em;">04</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Pagá como prefieras</h3>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: #6F8790;">Dentro de la app con Stripe o MercadoPago, o por fuera si lo acordás.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer data-screen-label="Footer" style="background: #FFFFFF; border-top: 1px solid #DCE3E5; border-radius: 48px 48px 0 0; box-shadow: 0 -12px 40px rgba(11,31,38,.05); margin-top: 8px;">
+    <div style="max-width: 1160px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px 0; display: flex; gap: 48px; flex-wrap: wrap; justify-content: space-between;">
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 320px;">
+        <span style="display: flex; align-items: center; gap: 10px;">
+          <span style="width: 28px; height: 28px; border-radius: 8px; background: #0C5678; display: grid; place-items: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+          </span>
+          <span style="font-weight: 800; letter-spacing: .04em; font-size: 15px;">MILOCATIVA</span>
+        </span>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #6F8790;">Alquiler de inmuebles, maquinaria y servicios para la industria del shale en Añelo, Neuquén.</p>
+      </div>
+      <div style="display: flex; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Empresa</span>
+          <a href="#nosotros" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Nosotros</a>
+          <a href="#como-funciona" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Cómo funciona</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Contacto</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Catálogo</span>
+          <a href="#catalogo" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Inmuebles</a>
+          <a href="#catalogo" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Maquinaria</a>
+          <a href="#catalogo" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Servicios</a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 800; color: #9FB2B8; letter-spacing: .06em; text-transform: uppercase;">Legal</span>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Términos</a>
+          <a href="#" style="text-decoration: none; color: #3E545C; font-size: 14px; font-weight: 600;" style-hover="color: #0C5678;">Privacidad</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1160px; margin: 32px auto 0; padding: 20px 24px; border-top: 1px solid #DCE3E5; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: #6F8790;">
+      <span>© 2026 MILOCATIVA. Todos los derechos reservados.</span>
+      <span>Hecho en Neuquén 🇦🇷</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;enableMotion&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Motion&quot; },
+  &quot;grainTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Texture&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    this._nav = this._nav || React.createRef();
+    return {
+      navRef: this._nav,
+      noop: (e) => { e.preventDefault(); e.stopPropagation(); },
+      showGrain: this.props.grainTexture ?? true,
+      aboutTransform: this.state && this.state.aboutFlipped ? 'rotateX(180deg)' : 'rotateX(0deg)',
+      aboutEnter: () => this.setState({ aboutFlipped: true }),
+      aboutLeave: () => this.setState({ aboutFlipped: false }),
+    };
+  }
+
+  componentDidMount() {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motion = (this.props.enableMotion ?? true) && !reduced;
+
+    // Scroll reveals (opacity-only fallback when motion is off)
+    const targets = [];
+    document.querySelectorAll('[data-reveal]').forEach((el) => {
+      const kind = el.getAttribute('data-reveal');
+      if (kind === 'children') {
+        Array.from(el.children).forEach((child, i) => {
+          child.setAttribute('data-rv-kind', 'up');
+          child.setAttribute('data-rv-delay', String(i * 90));
+          targets.push(child);
+        });
+      } else {
+        el.setAttribute('data-rv-kind', kind);
+        el.setAttribute('data-rv-delay', el.getAttribute('data-reveal-delay') || '0');
+        targets.push(el);
+      }
+    });
+    const els = targets.filter((el) => !el.hasAttribute('data-revealed'));
+    const show = (el) => {
+      if (el.hasAttribute('data-revealed')) return;
+      el.setAttribute('data-revealed', '');
+      const delay = parseInt(el.getAttribute('data-rv-delay') || '0', 10);
+      el.style.transition =
+        'opacity .5s cubic-bezier(.22,1,.36,1) ' + delay + 'ms, transform .7s cubic-bezier(.22,1,.36,1) ' + delay + 'ms';
+      requestAnimationFrame(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    };
+    els.forEach((el) => {
+      el.style.opacity = '0';
+      if (motion) {
+        const k = el.getAttribute('data-rv-kind');
+        el.style.transform =
+          k === 'scale' ? 'scale(1.03)' : k === 'stack' ? 'translateY(56px) scale(.95)' : 'translateY(24px)';
+      }
+    });
+    // Immediately reveal anything already in the viewport at mount time
+    requestAnimationFrame(() => {
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) show(el);
+      });
+    });
+    // Failsafe: never leave content hidden
+    setTimeout(() => {
+      els.forEach((el) => {
+        if (!el.hasAttribute('data-revealed') && el.getBoundingClientRect().top < window.innerHeight) show(el);
+      });
+    }, 1200);
+    this._io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            show(e.target);
+            this._io.unobserve(e.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0 }
+    );
+    els.forEach((el) => this._io.observe(el));
+
+    // Navbar: transparent -> solid on scroll
+    this._onScroll = () => {
+      const nav = this._nav && this._nav.current;
+      if (!nav) return;
+      const solid = window.scrollY > 24;
+      nav.style.backgroundColor = solid ? '#FFFFFF' : 'transparent';
+      nav.style.boxShadow = solid ? '0 8px 24px rgba(11,31,38,.06)' : 'none';
+      nav.style.borderBottomColor = solid ? '#DCE3E5' : 'transparent';
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+
+  }
+
+  componentWillUnmount() {
+    if (this._io) this._io.disconnect();
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._glowCleanup) this._glowCleanup();
+  }
+}
+</script>
+</body>
+</html>
