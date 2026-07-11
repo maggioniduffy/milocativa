@@ -6,14 +6,23 @@ import { useEffect, useRef } from "react";
 const PETROL = "12,86,120";
 const TEAL = "14,140,127";
 
+interface TopoBackgroundProps {
+  /**
+   * `fixed` (default) covers the whole viewport, for page-level use.
+   * `absolute` scopes it to the nearest positioned ancestor instead —
+   * for a panel-level backdrop like the auth page's form column.
+   */
+  variant?: "fixed" | "absolute";
+}
+
 /**
- * Decorative animated topographic background (fixed, behind all content) used
+ * Decorative animated topographic background (behind all content) used
  * on the landing and building pages: petrol contour lines with teal index
  * lines, a dot grid, and a cursor halo that repels the lines. Ghost cursors
  * keep it alive while idle; `prefers-reduced-motion` renders a single static
  * frame.
  */
-export function TopoBackground() {
+export function TopoBackground({ variant = "fixed" }: TopoBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -165,7 +174,10 @@ export function TopoBackground() {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+    <div
+      className={`pointer-events-none ${variant} inset-0 -z-10 overflow-hidden`}
+      aria-hidden
+    >
       <div className="absolute -left-[10%] -top-[15%] h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(14,140,127,.06)_0%,transparent_65%)]" />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
     </div>

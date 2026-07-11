@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Heart, Star } from "lucide-react";
 
 import { productContent } from "@/content/product";
@@ -23,6 +24,8 @@ export function ProductBookingCard({
 }: ProductBookingCardProps) {
   const { booking, favoriteLabel } = productContent;
   const [isFavorite, setIsFavorite] = useState(false);
+  const pathname = usePathname();
+  const signInHref = `${siteContent.nav.signIn.href}?redirect_url=${encodeURIComponent(pathname)}`;
 
   return (
     <aside className="rounded-3xl border border-surface-border bg-surface p-6 shadow-md lg:sticky lg:top-[88px]">
@@ -58,7 +61,7 @@ export function ProductBookingCard({
       </p>
 
       <Link
-        href={siteContent.nav.signIn.href}
+        href={signInHref}
         className="flex w-full items-center justify-center rounded-full bg-brand px-4 py-3 text-[15px] font-bold text-white shadow-md shadow-brand/30 transition-colors hover:bg-brand-hover"
       >
         {booking.contactCta}

@@ -1,5 +1,8 @@
 export type Category = "estate" | "machinery" | "service" | "parking";
 
+/** Clerk `publicMetadata.role` — no separate roles table. */
+export type Role = "admin" | "user";
+
 export type RentalStatus =
   | "requested"
   | "accepted"

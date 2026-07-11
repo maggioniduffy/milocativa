@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Instrument+Serif:ital@1&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #F7F9FA; color: #0B1F26; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    * { box-sizing: border-box; }
+    a { color: #0C5678; }
+    a:hover { color: #0A465F; }
+    ::selection { background: rgba(12,86,120,0.15); }
+    input::placeholder { color: #9AABB2; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr); min-width: 360px;" ref="{{ rootRef }}">
+
+  <!-- ============ FORM PANEL ============ -->
+  <div style="position: relative; display: flex; flex-direction: column; min-height: 100vh; overflow: hidden;">
+    <!-- soft topo background behind form -->
+    <div style="position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .5;">
+      <div style="position: absolute; top: -18%; left: -14%; width: 46vw; height: 46vw; border-radius: 50%; background: radial-gradient(circle, rgba(14,140,127,.07) 0%, transparent 66%);"></div>
+      <x-import component-from-global-scope="topo-bg" from="./topo-bg.js" hint-size="100%,100%" style="position: absolute; inset: 0;"></x-import>
+    </div>
+
+    <!-- brand -->
+    <header style="position: relative; z-index: 1; padding: 26px clamp(24px, 5vw, 56px) 0;">
+      <a href="MILOCATIVA Landing.dc.html" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #0B1F26;">
+        <span style="width: 32px; height: 32px; border-radius: 10px; background: #0C5678; display: grid; place-items: center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 21v-6h6v6"></path></svg>
+        </span>
+        <span style="font-weight: 800; letter-spacing: .04em; font-size: 17px;">MILOCATIVA</span>
+      </a>
+    </header>
+
+    <!-- form body -->
+    <div style="position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px clamp(24px, 5vw, 56px) 48px;">
+      <div style="width: 100%; max-width: 420px; animation: fadeSlide .4s ease;">
+
+        <!-- ===== MAIN VIEW (login / signup) ===== -->
+        <sc-if value="{{ isMain }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <p style="margin: 0 0 6px; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #0E8C7F;">{{ eyebrow }}</p>
+          <h1 style="margin: 0 0 8px; font-size: clamp(28px, 3.4vw, 36px); line-height: 1.1; font-weight: 800; letter-spacing: -0.02em;">{{ title }}</h1>
+          <p style="margin: 0 0 26px; font-size: 15.5px; line-height: 1.6; color: #3E545C; text-wrap: pretty;">{{ subtitle }}</p>
+
+          <!-- tab toggle -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: #EEF2F3; border-radius: 999px; margin-bottom: 24px;">
+            <button type="button" onClick="{{ goLogin }}" style="border: none; cursor: pointer; padding: 10px 12px; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 14px; transition: background .2s ease, color .2s ease, box-shadow .2s ease; background: {{ loginTabBg }}; color: {{ loginTabColor }}; box-shadow: {{ loginTabShadow }};">Ingresar</button>
+            <button type="button" onClick="{{ goSignup }}" style="border: none; cursor: pointer; padding: 10px 12px; border-radius: 999px; font-family: inherit; font-weight: 700; font-size: 14px; transition: background .2s ease, color .2s ease, box-shadow .2s ease; background: {{ signupTabBg }}; color: {{ signupTabColor }}; box-shadow: {{ signupTabShadow }};">Crear cuenta</button>
+          </div>
+
+          <!-- Google -->
+          <button type="button" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 13px; border-radius: 999px; border: 1.5px solid #DCE3E5; background: #FFFFFF; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 15px; color: #0B1F26; transition: background .15s ease, border-color .15s ease, transform .1s ease;" style-hover="background: #F4F8F9; border-color: #C9D3D6;" style-active="transform: scale(.985);" style-focus-visible="outline: 2px solid #0C5678; outline-offset: 2px;">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1Z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"></path><path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84Z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z"></path></svg>
+            Continuar con Google
+          </button>
+
+          <div style="display: flex; align-items: center; gap: 14px; margin: 20px 0;">
+            <span style="flex: 1; height: 1px; background: #DCE3E5;"></span>
+            <span style="font-size: 12.5px; font-weight: 600; color: #9AABB2;">o con tu correo</span>
+            <span style="flex: 1; height: 1px; background: #DCE3E5;"></span>
+          </div>
+
+          <!-- method segmented (login only) -->
+          <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 18px;">
+            <button type="button" onClick="{{ usePassword }}" style="border: 1.5px solid {{ pwBorder }}; cursor: pointer; padding: 9px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13.5px; background: {{ pwBg }}; color: {{ pwColor }}; transition: all .15s ease;">Contraseña</button>
+            <button type="button" onClick="{{ useOtp }}" style="border: 1.5px solid {{ otpBorder }}; cursor: pointer; padding: 9px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13.5px; background: {{ otpBg }}; color: {{ otpColor }}; transition: all .15s ease;">Código por email</button>
+          </div>
+          </sc-if>
+
+          <form onSubmit="{{ onSubmit }}" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- name (signup) -->
+            <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+            <label style="display: block;">
+              <span style="display: block; font-size: 13.5px; font-weight: 700; color: #0B1F26; margin-bottom: 7px;">Nombre completo</span>
+              <input type="text" placeholder="Ej. Juan Pérez" style="width: 100%; padding: 13px 15px; border-radius: 12px; border: 1.5px solid #DCE3E5; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #0B1F26; outline: none; transition: border-color .15s ease, box-shadow .15s ease;" style-focus="border-color: #0C5678; box-shadow: 0 0 0 3px rgba(12,86,120,.12);">
+            </label>
+            </sc-if>
+
+            <!-- email (always) -->
+            <label style="display: block;">
+              <span style="display: block; font-size: 13.5px; font-weight: 700; color: #0B1F26; margin-bottom: 7px;">Correo electrónico</span>
+              <input type="email" placeholder="tu@empresa.com" style="width: 100%; padding: 13px 15px; border-radius: 12px; border: 1.5px solid #DCE3E5; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #0B1F26; outline: none; transition: border-color .15s ease, box-shadow .15s ease;" style-focus="border-color: #0C5678; box-shadow: 0 0 0 3px rgba(12,86,120,.12);">
+            </label>
+
+            <!-- password (signup always, login when password method) -->
+            <sc-if value="{{ showPassword }}" hint-placeholder-val="{{ true }}">
+            <label style="display: block;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px;">
+                <span style="font-size: 13.5px; font-weight: 700; color: #0B1F26;">Contraseña</span>
+                <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+                <button type="button" onClick="{{ goForgot }}" style="border: none; background: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 13px; font-weight: 700; color: #0C5678;" style-hover="color: #0A465F;">¿Olvidaste tu contraseña?</button>
+                </sc-if>
+              </div>
+              <div style="position: relative;">
+                <input type="{{ pwInputType }}" placeholder="{{ pwPlaceholder }}" style="width: 100%; padding: 13px 44px 13px 15px; border-radius: 12px; border: 1.5px solid #DCE3E5; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #0B1F26; outline: none; transition: border-color .15s ease, box-shadow .15s ease;" style-focus="border-color: #0C5678; box-shadow: 0 0 0 3px rgba(12,86,120,.12);">
+                <button type="button" onClick="{{ togglePw }}" aria-label="Mostrar contraseña" style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); width: 32px; height: 32px; display: grid; place-items: center; border: none; background: none; cursor: pointer; color: #6F8790; border-radius: 8px;" style-hover="color: #0B1F26; background: #EEF2F3;">
+                  {{ eyeIcon }}
+                </button>
+              </div>
+            </label>
+            </sc-if>
+
+            <!-- terms (signup) -->
+            <sc-if value="{{ isSignup }}" hint-placeholder-val="{{ false }}">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 13.5px; line-height: 1.5; color: #3E545C;">
+              <input type="checkbox" style="appearance: none; -webkit-appearance: none; flex: none; width: 20px; height: 20px; margin: 1px 0 0; border: 1.5px solid #C9D3D6; border-radius: 6px; background: #FFFFFF; cursor: pointer; position: relative; transition: background .15s ease, border-color .15s ease;" checked="{{ terms }}" onChange="{{ toggleTerms }}" style-checked="background: #0C5678; border-color: #0C5678;">
+              <span>Acepto los <a href="#" style="font-weight: 700;">Términos de servicio</a> y la <a href="#" style="font-weight: 700;">Política de privacidad</a> de MILOCATIVA.</span>
+            </label>
+            </sc-if>
+
+            <button type="submit" style="width: 100%; margin-top: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 999px; border: none; cursor: pointer; background: #0C5678; color: #FFFFFF; font-family: inherit; font-weight: 700; font-size: 15.5px; box-shadow: 0 4px 16px rgba(12,86,120,.28); transition: background .2s ease, transform .1s ease;" style-hover="background: #0A465F;" style-active="transform: scale(.985);" style-focus-visible="outline: 2px solid #0C5678; outline-offset: 2px;">
+              {{ submitLabel }}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            </button>
+          </form>
+
+          <p style="margin: 22px 0 0; text-align: center; font-size: 14px; color: #3E545C;">
+            {{ switchPrompt }}
+            <button type="button" onClick="{{ toggleTab }}" style="border: none; background: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 14px; font-weight: 700; color: #0C5678;" style-hover="color: #0A465F;">{{ switchAction }}</button>
+          </p>
+        </div>
+        </sc-if>
+
+        <!-- ===== FORGOT PASSWORD VIEW ===== -->
+        <sc-if value="{{ isForgot }}" hint-placeholder-val="{{ false }}">
+        <div style="animation: fadeSlide .35s ease;">
+          <button type="button" onClick="{{ goBack }}" style="display: inline-flex; align-items: center; gap: 6px; border: none; background: none; cursor: pointer; padding: 0; margin-bottom: 22px; font-family: inherit; font-size: 14px; font-weight: 700; color: #3E545C;" style-hover="color: #0B1F26;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            Volver
+          </button>
+          <span style="display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: rgba(12,86,120,.10); color: #0C5678; margin-bottom: 18px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </span>
+          <h1 style="margin: 0 0 8px; font-size: clamp(26px, 3.2vw, 32px); line-height: 1.12; font-weight: 800; letter-spacing: -0.02em;">Recuperar contraseña</h1>
+          <p style="margin: 0 0 26px; font-size: 15.5px; line-height: 1.6; color: #3E545C; text-wrap: pretty;">Ingresá tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
+          <form onSubmit="{{ onSubmit }}" style="display: flex; flex-direction: column; gap: 16px;">
+            <label style="display: block;">
+              <span style="display: block; font-size: 13.5px; font-weight: 700; color: #0B1F26; margin-bottom: 7px;">Correo electrónico</span>
+              <input type="email" placeholder="tu@empresa.com" style="width: 100%; padding: 13px 15px; border-radius: 12px; border: 1.5px solid #DCE3E5; background: #FFFFFF; font-family: inherit; font-size: 15px; color: #0B1F26; outline: none; transition: border-color .15s ease, box-shadow .15s ease;" style-focus="border-color: #0C5678; box-shadow: 0 0 0 3px rgba(12,86,120,.12);">
+            </label>
+            <button type="submit" style="width: 100%; margin-top: 4px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 999px; border: none; cursor: pointer; background: #0C5678; color: #FFFFFF; font-family: inherit; font-weight: 700; font-size: 15.5px; box-shadow: 0 4px 16px rgba(12,86,120,.28); transition: background .2s ease, transform .1s ease;" style-hover="background: #0A465F;" style-active="transform: scale(.985);">Enviar enlace</button>
+          </form>
+        </div>
+        </sc-if>
+
+        <!-- ===== OTP VIEW ===== -->
+        <sc-if value="{{ isOtp }}" hint-placeholder-val="{{ false }}">
+        <div style="animation: fadeSlide .35s ease;">
+          <button type="button" onClick="{{ goBack }}" style="display: inline-flex; align-items: center; gap: 6px; border: none; background: none; cursor: pointer; padding: 0; margin-bottom: 22px; font-family: inherit; font-size: 14px; font-weight: 700; color: #3E545C;" style-hover="color: #0B1F26;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            Volver
+          </button>
+          <span style="display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: rgba(14,140,127,.12); color: #0E8C7F; margin-bottom: 18px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+          </span>
+          <h1 style="margin: 0 0 8px; font-size: clamp(26px, 3.2vw, 32px); line-height: 1.12; font-weight: 800; letter-spacing: -0.02em;">Verificá tu correo</h1>
+          <p style="margin: 0 0 26px; font-size: 15.5px; line-height: 1.6; color: #3E545C; text-wrap: pretty;">Enviamos un código de 6 dígitos a tu correo. Ingresalo abajo para continuar.</p>
+          <form onSubmit="{{ onSubmit }}">
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 20px;">
+              <sc-for list="{{ otpCells }}" as="cell" hint-placeholder-count="6">
+                <input type="text" maxlength="1" inputmode="numeric" style="width: 100%; aspect-ratio: 1; text-align: center; padding: 0; border-radius: 12px; border: 1.5px solid #DCE3E5; background: #FFFFFF; font-family: inherit; font-size: 22px; font-weight: 700; color: #0B1F26; outline: none; transition: border-color .15s ease, box-shadow .15s ease;" style-focus="border-color: #0C5678; box-shadow: 0 0 0 3px rgba(12,86,120,.12);">
+              </sc-for>
+            </div>
+            <button type="submit" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 999px; border: none; cursor: pointer; background: #0C5678; color: #FFFFFF; font-family: inherit; font-weight: 700; font-size: 15.5px; box-shadow: 0 4px 16px rgba(12,86,120,.28); transition: background .2s ease, transform .1s ease;" style-hover="background: #0A465F;" style-active="transform: scale(.985);">Verificar y continuar</button>
+          </form>
+          <p style="margin: 20px 0 0; text-align: center; font-size: 14px; color: #3E545C;">¿No recibiste el código? <button type="button" style="border: none; background: none; cursor: pointer; padding: 0; font-family: inherit; font-size: 14px; font-weight: 700; color: #0C5678;" style-hover="color: #0A465F;">Reenviar</button></p>
+        </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PHOTO PANEL ============ -->
+  <div ref="{{ photoRef }}" style="position: relative; overflow: hidden; background: #0B1F26; min-height: 100vh;">
+    <div class="washed-photo" style="position: absolute; inset: 0;">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="auth-photo" shape="rect" placeholder="Foto industrial · Vaca Muerta" hint-size="100%,100%" style="position: absolute; inset: 0; width: 100%; height: 100%; filter: saturate(.82) contrast(.96) brightness(.9);"></x-import>
+    </div>
+    <!-- tint + gradient -->
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,31,38,.28) 0%, rgba(11,31,38,.15) 40%, rgba(11,31,38,.72) 100%); pointer-events: none;"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(120deg, rgba(12,86,120,.34) 0%, transparent 55%); pointer-events: none;"></div>
+
+    <!-- overlay content -->
+    <div style="position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; justify-content: space-between; padding: clamp(32px, 4vw, 56px); pointer-events: none;">
+      <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.14); backdrop-filter: blur(6px); color: #FFFFFF; font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        Añelo · Vaca Muerta
+      </span>
+      <div>
+        <h2 style="margin: 0 0 14px; color: #FFFFFF; font-size: clamp(26px, 2.8vw, 40px); line-height: 1.14; font-weight: 800; letter-spacing: -0.02em; max-width: 15ch; text-wrap: balance;">Todo el catálogo del shale, <em style="font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-style: italic; color: #8FE3D6;">en un solo lugar</em></h2>
+        <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; color: rgba(255,255,255,.9); font-weight: 700; font-size: 14px;">
+          <span style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 26px; font-weight: 800; color: #FFFFFF;">+120</span> activos</span>
+          <span style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.4);"></span>
+          <span style="display: flex; align-items: baseline; gap: 6px;"><span style="font-size: 26px; font-weight: 800; color: #FFFFFF;">3</span> categorías</span>
+          <span style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.4);"></span>
+          <span>Gestión 100% local</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1200, &quot;height&quot;: 800}}">
+class Component extends DCLogic {
+  state = { tab: 'login', view: 'main', method: 'password', showPw: false, terms: false };
+
+  componentDidMount() {
+    this.applyResponsive();
+    this._onResize = () => this.applyResponsive();
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+
+  applyResponsive() {
+    const root = this.rootRef, photo = this.photoRef;
+    if (!root) return;
+    const narrow = window.innerWidth < 900;
+    root.style.gridTemplateColumns = narrow ? '1fr' : 'minmax(0, 1fr) minmax(0, 1.02fr)';
+    if (photo) {
+      photo.style.display = narrow ? 'none' : 'block';
+      photo.style.minHeight = narrow ? '0' : '100vh';
+    }
+  }
+
+  set(patch) { this.setState(patch); }
+
+  renderVals() {
+    const s = this.state;
+    const isLogin = s.tab === 'login';
+    const isSignup = s.tab === 'signup';
+    const passwordMethod = isSignup || s.method === 'password';
+
+    const eye = (open) => open
+      ? React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.25, strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('path', { d: 'M9.88 9.88a3 3 0 1 0 4.24 4.24' }),
+          React.createElement('path', { d: 'M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68' }),
+          React.createElement('path', { d: 'M6.61 6.61A13.53 13.53 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61' }),
+          React.createElement('line', { x1: 2, x2: 22, y1: 2, y2: 22 }))
+      : React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.25, strokeLinecap: 'round', strokeLinejoin: 'round' },
+          React.createElement('path', { d: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z' }),
+          React.createElement('circle', { cx: 12, cy: 12, r: 3 }));
+
+    return {
+      rootRef: (el) => { this.rootRef = el; },
+      photoRef: (el) => { this.photoRef = el; },
+
+      isMain: s.view === 'main',
+      isForgot: s.view === 'forgot',
+      isOtp: s.view === 'otp',
+      isLogin, isSignup,
+
+      eyebrow: isLogin ? 'Bienvenido de nuevo' : 'Sumate a MILOCATIVA',
+      title: isLogin ? 'Ingresá a tu cuenta' : 'Creá tu cuenta',
+      subtitle: isLogin
+        ? 'Accedé al catálogo, gestioná tus alquileres y seguí tus solicitudes.'
+        : 'Reservá inmuebles, maquinaria y servicios para tu operación en minutos.',
+
+      // tab styles
+      loginTabBg: isLogin ? '#FFFFFF' : 'transparent',
+      loginTabColor: isLogin ? '#0B1F26' : '#6F8790',
+      loginTabShadow: isLogin ? '0 1px 3px rgba(11,31,38,.12)' : 'none',
+      signupTabBg: isSignup ? '#FFFFFF' : 'transparent',
+      signupTabColor: isSignup ? '#0B1F26' : '#6F8790',
+      signupTabShadow: isSignup ? '0 1px 3px rgba(11,31,38,.12)' : 'none',
+
+      // method segmented (login)
+      pwBg: s.method === 'password' ? 'rgba(12,86,120,.10)' : '#FFFFFF',
+      pwColor: s.method === 'password' ? '#0C5678' : '#6F8790',
+      pwBorder: s.method === 'password' ? '#0C5678' : '#DCE3E5',
+      otpBg: s.method === 'otp' ? 'rgba(12,86,120,.10)' : '#FFFFFF',
+      otpColor: s.method === 'otp' ? '#0C5678' : '#6F8790',
+      otpBorder: s.method === 'otp' ? '#0C5678' : '#DCE3E5',
+
+      showPassword: passwordMethod,
+      pwInputType: s.showPw ? 'text' : 'password',
+      pwPlaceholder: isSignup ? 'Creá una contraseña' : 'Tu contraseña',
+      eyeIcon: eye(s.showPw),
+
+      terms: s.terms,
+      submitLabel: isSignup ? 'Crear cuenta' : (s.method === 'otp' ? 'Enviar código' : 'Ingresar'),
+      switchPrompt: isLogin ? '¿Todavía no tenés cuenta?' : '¿Ya tenés una cuenta?',
+      switchAction: isLogin ? 'Crear cuenta' : 'Ingresar',
+
+      otpCells: [0, 1, 2, 3, 4, 5],
+
+      // handlers
+      goLogin: () => this.set({ tab: 'login', view: 'main' }),
+      goSignup: () => this.set({ tab: 'signup', view: 'main' }),
+      toggleTab: () => this.set({ tab: isLogin ? 'signup' : 'login', view: 'main', method: 'password' }),
+      usePassword: () => this.set({ method: 'password' }),
+      useOtp: () => this.set({ method: 'otp' }),
+      togglePw: () => this.set({ showPw: !s.showPw }),
+      toggleTerms: (e) => this.set({ terms: e.target.checked }),
+      goForgot: () => this.set({ view: 'forgot' }),
+      goBack: () => this.set({ view: 'main' }),
+      onSubmit: (e) => {
+        e.preventDefault();
+        if (isLogin && s.method === 'otp' && s.view === 'main') { this.set({ view: 'otp' }); }
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

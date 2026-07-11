@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-Public site foundation — landing, catalog, and building detail pages implemented with placeholder data; auth flows not started.
+Public site foundation — landing, catalog, and building detail pages implemented with placeholder data. Clerk auth (sign-in/sign-up, role-based redirect, role provisioning) is now wired end to end.
 
 ## Current Goal
 
-Wire the catalog and building pages to Supabase (real listings, buildings, and unit statuses) and start the Clerk sign-in flow.
+Wire the catalog and building pages to Supabase (real listings, buildings, and unit statuses).
 
 ## Completed
 
@@ -43,6 +43,21 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
   - `components/product/`: `productGallery.tsx` (bento hero + up to 4 tiles, degrades to single hero photo or plain cover for products without extra photos), `productOverview.tsx` (quick facts row, description, features checklist, location note), `productBookingCard.tsx` (sticky price/rating card, local favorite toggle, "Iniciar conversación" CTA linking to `/sign-in`).
   - `productCard.tsx` now links to `/catalogo/[id]` instead of `#`.
   - No live chat/booking wired yet — CTA only routes to sign-in, matching the "auth flows not started" phase.
+- Clerk auth (`/sign-in`, `/sign-up`), per `context/feature-specs/01-auth-page.md`:
+  - Fixed a pre-existing bug: `proxy.ts` lived at the repo root, but with a `src/` layout Next.js only loads it from `src/proxy.ts` — Clerk's own middleware was silently never running (`auth()`/`currentUser()` threw). Moved it to `src/proxy.ts`; `/admin` gating (`auth.protect({ role: "admin" })`) now actually executes. No other change to its logic.
+  - `src/app/layout.tsx` wraps the app in `<ClerkProvider>` with a shared `appearance` (`lib/clerk/appearance.ts`, tokenized via CSS vars — no hardcoded hex) and `localization` (`content/auth.ts` — full Spanish override of Clerk's default English copy for the OAuth/OTP/password flows actually in use). `localization`/global `appearance` are ClerkProvider-only props in this Clerk version (7.x) — `<SignIn/>`/`<SignUp/>` no longer take a `localization` prop directly.
+  - `src/app/auth/redirect/page.tsx`: default post-auth landing (used when no `redirect_url` was carried over) — reads `publicMetadata.role` via `currentUser()` and redirects to `/admin` or `/catalogo` per `lib/clerk/redirects.ts::ROLE_HOME_ROUTE`; missing role defaults to `user`.
+  - `src/app/api/webhooks/clerk/route.ts`: verifies the `user.created` webhook (`verifyWebhook` from `@clerk/nextjs/webhooks`, keyed by `CLERK_WEBHOOK_SIGNING_SECRET`) and sets `publicMetadata.role = "user"` on new sign-ups — the only place `role` is ever written server-side; no admin self-signup path exists.
+  - `types/domain.ts` gained `Role = "admin" | "user"`, matching the existing `publicMetadata.role` convention from `architecture-context.md`.
+  - `components/product/productBookingCard.tsx`'s "Iniciar conversación" CTA now links to `/sign-in?redirect_url=<current item path>` (via `usePathname()`) instead of a bare `/sign-in`, so the round trip back to the item page works once real gating exists.
+  - `lib/supabase/client.ts` / `server.ts` already forward the Clerk session token with no `template` argument — correct for Clerk's native Supabase integration (no per-code-side template wiring needed); the `public_metadata` claim itself must still be added to the session token in the Clerk dashboard (see Next Up).
+- Auth page visual pass per `context/designs/Auth-page/design_handoff_ingresar/README.md` (split-screen "Ingresar/Crear cuenta" design, high-fidelity):
+  - `/sign-in` and `/sign-up` (`src/app/sign-in/page.tsx`, `src/app/sign-up/page.tsx`) are now plain (non-catch-all) routes rendering `components/auth/authShell.tsx`, since Clerk 7's `<SignIn/>`/`<SignUp/>` no longer support `routing="virtual"` (that value was dropped from the actual component prop type even though `RoutingStrategy` still lists it) — omitting `path`/`routing` entirely gives the same self-contained, non-file-routed widget the design needs.
+  - `components/auth/authShell.tsx`: two-column split screen (`min-[900px]:grid-cols-[...]`, photo panel hidden below 900px) — left column has the brand header + `TopoBackground` (new `variant="absolute"` prop scopes the existing fixed/viewport canvas to a panel instead) + `authPanel.tsx`; right column is `authPhotoPanel.tsx`.
+  - `components/auth/authPanel.tsx` (client): our own tab toggle (`login`/`signup`, pill segmented control) mounts either `<SignIn/>` or `<SignUp/>` — clicking the tab or the bottom switch-prompt just flips local state, no navigation. Clerk's own built-in footer is hidden (`appearance.elements.footer: "hidden"`) since this custom switch prompt replaces it. Clerk's own `header`/title/subtitle (localized) are kept for each internal screen (start/password/forgotPassword/emailCode); our own "eyebrow" label sits above since Clerk has no eyebrow slot.
+  - `components/auth/authPhotoPanel.tsx`: reuses `public/images/hero-anelo.png` (no separate Vaca Muerta photo asset exists) with the design's exact gradient overlays, pill badge, serif-italic heading accent, and stat row from `content/auth.ts`.
+  - **Deliberate gap vs. the design**: the design's pre-submit "Contraseña / Código por email" segmented control (choosing a sign-in strategy *before* entering an email) isn't implemented — Clerk's `<SignIn/>` only offers a strategy choice *after* the identifier is submitted; doing it beforehand would require dropping to headless `useSignIn()`/`useSignUp()` hooks, which conflicts with `01-auth-page.md`'s explicit "use `<SignIn/>`/`<SignUp/>`, not custom flows" instruction. User confirmed: drop the toggle, keep the prebuilt components. Clerk's own post-submit method choice still works.
+  - Also not implemented (Clerk has no themeable slot for it): the 52×52 icon badge (lock/mail) on the forgot-password/OTP screens.
 
 ## In Progress
 
@@ -50,7 +65,9 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
 
 - Wire `/catalogo` and `/edificios/[slug]` to Supabase: listings, buildings, per-unit rental statuses; replace in-memory favorites with real user state.
 - Price / Duración / Disponibilidad filter dropdowns and the search input are visual stubs — define their behavior and implement.
-- Clerk sign-in flow — navbar links to `/sign-in` (Clerk convention) and `/perfil`; neither route exists yet.
+- `/perfil` route doesn't exist yet (navbar links to it already).
+- Configure the real Clerk instance: set `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `CLERK_SECRET_KEY` in `.env.local` (currently blank — Clerk auto-falls back to a temporary keyless dev instance), add a `user.created` webhook endpoint pointing at `/api/webhooks/clerk` in the Clerk dashboard and copy its signing secret into `CLERK_WEBHOOK_SIGNING_SECRET`, and add a `public_metadata` custom claim (`{{user.public_metadata}}`) to the session token so RLS can read `auth.jwt() -> 'public_metadata' ->> 'role'`.
+- Gate the actual "start a conversation" / "request a rental" actions (not built yet) behind an auth check once those features exist — today only the product page's "Iniciar conversación" CTA sends unauthenticated visitors through `/sign-in?redirect_url=...`.
 
 ## Open Questions
 
@@ -59,6 +76,7 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
 - Hero trust stats ("+120 activos disponibles") are filler numbers from the design brief; replace with real counts once the catalog is live.
 - Only Torre Añelo has building detail data, so every building card links to `/edificios/torre-anelo` for now (the design prototype does the same); real slugs need per-building unit data from Supabase.
 - Product detail pages now exist at `/catalogo/[id]` for catalog products; building unit blocks (`buildingDiagram.tsx`) still link to `#` since building units aren't in the catalog product id space yet.
+- `01-auth-page.md` names `/sign-in` + `/sign-up` in its "Routes" section but Spanish paths (`/iniciar-sesion`, `/registrarse`) in its "Check when done" section. Went with `/sign-in` / `/sign-up`: they already matched `.env.local` (`NEXT_PUBLIC_CLERK_SIGN_IN_URL`/`SIGN_UP_URL`) and the existing navbar/product-page links before this feature started.
 
 ## Architecture Decisions
 
@@ -77,6 +95,8 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
 - Building groups Estates and ParkingSpots via an optional buildingId (nullable — standalone properties don't need a Building record).
 - Rental no longer maps 1:1 to a single Item — bundled rentals go through a rental_items join table; always read/write through it, never through a single itemId on Rental.
 - Estate carries latitude/longitude, captured at listing creation/edit time, as the source of truth for map markers.
+- `proxy.ts` must live at `src/proxy.ts` (not the repo root) because the project uses a `src/` layout — this is a Next.js 16 file-location rule, distinct from the middleware.ts→proxy.ts rename already noted below.
+- New sign-ups get `role: "user"` written server-side by a Clerk `user.created` webhook (`app/api/webhooks/clerk`), not client-side — `publicMetadata` can't be set from the client.
 
 ## Session Notes
 

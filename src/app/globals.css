@@ -140,3 +140,21 @@
     @apply font-sans;
   }
 }
+
+/* Auth page (sign-in/sign-up) view-mount transition. */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[fadeSlide_\.4s_ease\] {
+    animation: none;
+  }
+}
