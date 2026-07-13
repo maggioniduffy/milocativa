@@ -67,3 +67,7 @@ Progress state must reflect the actual state of the implementation, not the inte
 2. No invariant defined in `architecture-context.md` was violated.
 3. Any Spanish-facing copy introduced is in the content/dictionary files, not hardcoded.
 4. `progress-tracker.md` reflects the completed work.
+
+## Memory
+
+- Update memory/MEMORY.md with the latest works after updatinf progress tracker

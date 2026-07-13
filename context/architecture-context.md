@@ -22,7 +22,7 @@
 - `app/(app)` — Authenticated user routes: conversations, rental requests, profile.
 - `app/admin` — Admin-only routes: inbox, listing management, rental approval. Protected in `proxy.ts` via `auth.protect({ role: 'admin' })`.
 - `app/api` — Route handlers: webhook receivers (Stripe, MercadoPago), server-side actions that require elevated (service-role) access not safe to run as RLS-scoped client calls.
-- `lib/supabase` — Supabase client factories (browser, server) that inject the Clerk JWT for RLS-scoped access.
+- `lib/supabase` — Supabase client factories: `client.ts` (browser) and `server.ts` (server) inject the Clerk JWT for RLS-scoped access; `serviceRole.ts` bypasses RLS and is only imported from `app/api` webhook handlers.
 - `lib/payments` — Stripe and MercadoPago SDK wrappers and shared payment-status mapping.
 - `lib/notifications` — Notification fan-out helpers (in-app insert, push send, email send).
 - `components` — UI composition: item cards, filter bar, chat thread, admin panel views.
@@ -41,8 +41,8 @@
 
 ## Auth and Access Model
 
-- Every person is a Clerk user; the Clerk `userId` (`sub` claim) is the primary key referenced across `rentals`, `messages`, `notifications`, and `push_subscriptions`.
-- Role (`admin` | `user`) lives in Clerk `publicMetadata` and is propagated into Supabase RLS policies via `auth.jwt() -> 'public_metadata' ->> 'role'`. There is no separate roles table.
+- Every person is a Clerk user; the Clerk `userId` (`sub` claim) is the primary key referenced across `rentals`, `messages`, `notifications`, and `push_subscriptions`. The `people` table (`supabase/migrations/0001_create_people.sql`) mirrors Clerk identity (`id`, `email`, `full_name`, `avatar_url`) so those tables have something to join against; `id`, `full_name`, and `avatar_url` are populated and kept in sync only by the Clerk webhook (`app/api/webhooks/clerk`) via the service-role client on `user.created` / `user.updated` / `user.deleted` — no client ever inserts, updates, or deletes its own `people` row.
+- Role (`admin` | `user`) lives in Clerk `publicMetadata` and is propagated into Supabase RLS policies via `auth.jwt() -> 'public_metadata' ->> 'role'`. There is no separate roles table, and `people` does not duplicate role either — it is only read from the JWT claim, never from a database column, so there is one source of truth.
 - Only authenticated users can open a conversation or submit a rental request.
 - A `user` can read/write only their own conversations, rentals, and notifications; an `admin` can read/write across all of them.
 - Supabase clients (browser and server) always forward the Clerk session token as the `Authorization` header so RLS evaluates the real caller — no client ever uses the service-role key directly, except inside `app/api` webhook handlers that must write on behalf of an external event (e.g. a Stripe webhook).
