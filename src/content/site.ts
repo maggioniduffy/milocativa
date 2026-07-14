@@ -20,6 +20,8 @@ export const siteContent = {
     signOut: "Cerrar sesión",
     menuTitle: "Menú",
     openMenu: "Abrir menú",
+    notifications: "Ver notificaciones",
+    accountMenu: "Abrir menú de cuenta",
   },
   footer: {
     columns: [

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { siteContent } from "@/content/site";
+import { cn } from "@/lib/utils";
 
 /** Building glyph from the brand design — a logo asset, not a UI icon. */
 function BrandGlyph({ className }: { className?: string }) {
@@ -22,15 +23,21 @@ function BrandGlyph({ className }: { className?: string }) {
   );
 }
 
-export function BrandMark() {
+export function BrandMark({ hideText }: { hideText?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-brand text-primary-foreground">
+    <Link href="/" className="flex items-center gap-2.5 shrink-0">
+      <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-brand text-primary-foreground shrink-0">
         <BrandGlyph className="h-[18px] w-[18px]" />
       </span>
-      <span className="text-base font-extrabold tracking-[.04em] text-copy-primary sm:text-[17px]">
+      <span
+        className={cn(
+          "text-base font-extrabold tracking-[.04em] text-copy-primary sm:text-[17px] transition-all duration-200",
+          hideText ? "hidden md:block" : "block"
+        )}
+      >
         {siteContent.brand.name}
       </span>
     </Link>
   );
 }
+

@@ -106,7 +106,7 @@ function BuildingCard({ building, color, isFavorite, onToggleFavorite }: Buildin
       // Placeholder: every card opens the one building with detail data until
       // buildings come from Supabase.
       href="/edificios/torre-anelo"
-      className="group flex w-[260px] shrink-0 snap-start flex-col gap-2.5 transition-transform duration-200 ease-out hover:-translate-y-1 sm:w-[320px]"
+      className="group flex w-[260px] shrink-0 snap-start scroll-ml-4 flex-col gap-2.5 transition-transform duration-200 ease-out hover:-translate-y-1 sm:w-[320px] sm:scroll-ml-0"
     >
       <div
         role="img"
@@ -177,7 +177,7 @@ function ShowAllCard() {
   return (
     <Link
       href={buildingsSection.showAll.href}
-      className="group flex w-[260px] shrink-0 snap-start flex-col gap-2.5 transition-transform duration-200 ease-out hover:-translate-y-1 sm:w-[320px]"
+      className="group flex w-[260px] shrink-0 snap-start scroll-ml-4 flex-col gap-2.5 transition-transform duration-200 ease-out hover:-translate-y-1 sm:w-[320px] sm:scroll-ml-0"
     >
       <div className="flex aspect-[3/2] items-center justify-center overflow-hidden rounded-2xl border border-surface-border bg-surface shadow-sm transition duration-200 group-hover:border-subtle-border group-hover:shadow-xl">
         <div className="relative h-[92px] w-[120px]">

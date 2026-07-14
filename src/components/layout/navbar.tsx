@@ -3,8 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Show, SignOutButton } from "@clerk/nextjs";
-import { CircleUserRound, LogOut, Menu } from "lucide-react";
+import { Show } from "@clerk/nextjs";
+import { Menu } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { BrandMark } from "@/components/layout/brandMark";
+import { UserMenu } from "@/components/layout/userMenu";
 import {
   CatalogCompactPill,
   CatalogSearchPanel,
@@ -56,7 +57,7 @@ export function Navbar() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <BrandMark />
+        <BrandMark hideText={showCompactPill} />
 
         <div className="relative flex min-h-11 flex-1 items-center justify-center">
           <nav
@@ -93,93 +94,52 @@ export function Navbar() {
           ) : null}
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <Show when="signed-in">
-            <Link
-              href={nav.profile.href}
-              className="flex items-center gap-1.5 text-sm font-medium text-copy-secondary transition-colors hover:text-copy-primary"
-            >
-              <CircleUserRound className="h-5 w-5" />
-              {nav.profile.label}
-            </Link>
-            <SignOutButton>
-              <button
-                type="button"
-                className="flex items-center gap-1.5 text-sm font-medium text-copy-muted transition-colors hover:text-copy-primary"
-              >
-                <LogOut className="h-4 w-4" />
-                {nav.signOut}
-              </button>
-            </SignOutButton>
-          </Show>
-          <Show when="signed-out">
+        {/* Signed-in: dashboard-style bell + avatar pill on every breakpoint. */}
+        <Show when="signed-in">
+          <UserMenu />
+        </Show>
+
+        {/* Signed-out: desktop CTA + mobile menu sheet. */}
+        <Show when="signed-out">
+          <div className="hidden items-center gap-3 md:flex">
             <Link
               href={nav.signIn.href}
               className={cn(buttonVariants(), "h-9 px-4")}
             >
               {nav.signIn.label}
             </Link>
-          </Show>
-        </div>
+          </div>
 
-        <Sheet>
-          <SheetTrigger
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "icon-lg" }),
-              "md:hidden"
-            )}
-            aria-label={nav.openMenu}
-          >
-            <Menu className="h-5 w-5" />
-          </SheetTrigger>
-          <SheetContent side="right" className="bg-surface">
-            <SheetHeader>
-              <SheetTitle>{nav.menuTitle}</SheetTitle>
-            </SheetHeader>
-            <nav className="flex flex-col gap-1 px-4" aria-label="Principal">
-              {nav.links.map((link) => (
-                <SheetClose
-                  key={link.href}
-                  render={
-                    <Link
-                      href={link.href}
-                      className="rounded-lg px-3 py-2 text-base font-medium text-copy-secondary transition-colors hover:bg-subtle hover:text-copy-primary"
-                    />
-                  }
-                >
-                  {link.label}
-                </SheetClose>
-              ))}
-              <Show when="signed-in">
-                <SheetClose
-                  render={
-                    <Link
-                      href={nav.profile.href}
-                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-copy-secondary transition-colors hover:bg-subtle hover:text-copy-primary"
-                    />
-                  }
-                >
-                  <CircleUserRound className="h-5 w-5" />
-                  {nav.profile.label}
-                </SheetClose>
-              </Show>
-            </nav>
-            <div className="mt-auto p-4">
-              <Show when="signed-in">
-                <SignOutButton>
-                  <button
-                    type="button"
-                    className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "h-11 w-full text-base"
-                    )}
+          <Sheet>
+            <SheetTrigger
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "icon-lg" }),
+                "md:hidden"
+              )}
+              aria-label={nav.openMenu}
+            >
+              <Menu className="h-5 w-5" />
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-surface">
+              <SheetHeader>
+                <SheetTitle>{nav.menuTitle}</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1 px-4" aria-label="Principal">
+                {nav.links.map((link) => (
+                  <SheetClose
+                    key={link.href}
+                    render={
+                      <Link
+                        href={link.href}
+                        className="rounded-lg px-3 py-2 text-base font-medium text-copy-secondary transition-colors hover:bg-subtle hover:text-copy-primary"
+                      />
+                    }
                   >
-                    <LogOut className="h-5 w-5" />
-                    {nav.signOut}
-                  </button>
-                </SignOutButton>
-              </Show>
-              <Show when="signed-out">
+                    {link.label}
+                  </SheetClose>
+                ))}
+              </nav>
+              <div className="mt-auto p-4">
                 <SheetClose
                   render={
                     <Link
@@ -190,10 +150,10 @@ export function Navbar() {
                 >
                   {nav.signIn.label}
                 </SheetClose>
-              </Show>
-            </div>
-          </SheetContent>
-        </Sheet>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </Show>
       </div>
 
       {hasCatalogSearch ? (
