@@ -22,7 +22,7 @@ export function useConversation(conversationId: string) {
       .select("*")
       .eq("conversation_id", conversationId)
       .order("sent_at", { ascending: true })
-      .then(({ data }) => data && setMessages(data as Message[]));
+      .then(({ data }) => data && setMessages(data as unknown as Message[]));
 
     const channel = supabase
       .channel(`conversation:${conversationId}`)

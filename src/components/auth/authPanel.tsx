@@ -46,9 +46,9 @@ export function AuthPanel({ initialTab, redirectUrl }: AuthPanelProps) {
       </div>
 
       {isLogin ? (
-        <SignIn key="login" fallbackRedirectUrl={fallbackRedirectUrl} />
+        <SignIn key="login" routing="hash" fallbackRedirectUrl={fallbackRedirectUrl} />
       ) : (
-        <SignUp key="signup" fallbackRedirectUrl={fallbackRedirectUrl} />
+        <SignUp key="signup" routing="hash" fallbackRedirectUrl={fallbackRedirectUrl} />
       )}
 
       <p className="mt-[22px] text-center text-sm text-copy-secondary">

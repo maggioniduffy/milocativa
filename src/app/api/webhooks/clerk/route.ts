@@ -15,6 +15,7 @@ interface ClerkUserData {
   first_name: string | null;
   last_name: string | null;
   image_url: string | null;
+  unsafe_metadata?: { phone?: string; companyName?: string } | null;
 }
 
 function primaryEmail(data: ClerkUserData): string | null {
@@ -26,6 +27,15 @@ function primaryEmail(data: ClerkUserData): string | null {
 
 function fullName(data: ClerkUserData): string | null {
   return [data.first_name, data.last_name].filter(Boolean).join(" ") || null;
+}
+
+/** Only populated if a future sign-up flow collects these via `unsafeMetadata`; null otherwise. */
+function phone(data: ClerkUserData): string | null {
+  return data.unsafe_metadata?.phone ?? null;
+}
+
+function companyName(data: ClerkUserData): string | null {
+  return data.unsafe_metadata?.companyName ?? null;
 }
 
 /**
@@ -42,7 +52,9 @@ function fullName(data: ClerkUserData): string | null {
 export async function POST(request: NextRequest) {
   let event;
   try {
-    event = await verifyWebhook(request);
+    event = await verifyWebhook(request, {
+      signingSecret: process.env.CLERK_WEBHOOK_SECRET,
+    });
   } catch {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
@@ -69,6 +81,8 @@ export async function POST(request: NextRequest) {
       email,
       full_name: fullName(data),
       avatar_url: data.image_url,
+      phone: phone(data),
+      company_name: companyName(data),
     });
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -78,6 +92,8 @@ export async function POST(request: NextRequest) {
   if (event.type === "user.updated") {
     const data = event.data as unknown as ClerkUserData;
     const email = primaryEmail(data);
+    const dataPhone = phone(data);
+    const dataCompanyName = companyName(data);
 
     const { error } = await supabase
       .from("people")
@@ -85,6 +101,11 @@ export async function POST(request: NextRequest) {
         ...(email ? { email } : {}),
         full_name: fullName(data),
         avatar_url: data.image_url,
+        // Only overwrite if unsafeMetadata actually carries a value — these
+        // aren't collected at sign-up today, so most updates shouldn't null
+        // out a value the user set later directly on their `people` row.
+        ...(dataPhone ? { phone: dataPhone } : {}),
+        ...(dataCompanyName ? { company_name: dataCompanyName } : {}),
       })
       .eq("id", data.id);
     if (error) {

@@ -3,7 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CircleUserRound, Menu } from "lucide-react";
+import { Show, SignOutButton } from "@clerk/nextjs";
+import { CircleUserRound, LogOut, Menu } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -93,19 +94,32 @@ export function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href={nav.profile.href}
-            className="flex items-center gap-1.5 text-sm font-medium text-copy-secondary transition-colors hover:text-copy-primary"
-          >
-            <CircleUserRound className="h-5 w-5" />
-            {nav.profile.label}
-          </Link>
-          <Link
-            href={nav.signIn.href}
-            className={cn(buttonVariants(), "h-9 px-4")}
-          >
-            {nav.signIn.label}
-          </Link>
+          <Show when="signed-in">
+            <Link
+              href={nav.profile.href}
+              className="flex items-center gap-1.5 text-sm font-medium text-copy-secondary transition-colors hover:text-copy-primary"
+            >
+              <CircleUserRound className="h-5 w-5" />
+              {nav.profile.label}
+            </Link>
+            <SignOutButton>
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-sm font-medium text-copy-muted transition-colors hover:text-copy-primary"
+              >
+                <LogOut className="h-4 w-4" />
+                {nav.signOut}
+              </button>
+            </SignOutButton>
+          </Show>
+          <Show when="signed-out">
+            <Link
+              href={nav.signIn.href}
+              className={cn(buttonVariants(), "h-9 px-4")}
+            >
+              {nav.signIn.label}
+            </Link>
+          </Show>
         </div>
 
         <Sheet>
@@ -136,29 +150,47 @@ export function Navbar() {
                   {link.label}
                 </SheetClose>
               ))}
-              <SheetClose
-                render={
-                  <Link
-                    href={nav.profile.href}
-                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-copy-secondary transition-colors hover:bg-subtle hover:text-copy-primary"
-                  />
-                }
-              >
-                <CircleUserRound className="h-5 w-5" />
-                {nav.profile.label}
-              </SheetClose>
+              <Show when="signed-in">
+                <SheetClose
+                  render={
+                    <Link
+                      href={nav.profile.href}
+                      className="flex items-center gap-2 rounded-lg px-3 py-2 text-base font-medium text-copy-secondary transition-colors hover:bg-subtle hover:text-copy-primary"
+                    />
+                  }
+                >
+                  <CircleUserRound className="h-5 w-5" />
+                  {nav.profile.label}
+                </SheetClose>
+              </Show>
             </nav>
             <div className="mt-auto p-4">
-              <SheetClose
-                render={
-                  <Link
-                    href={nav.signIn.href}
-                    className={cn(buttonVariants(), "h-11 w-full text-base")}
-                  />
-                }
-              >
-                {nav.signIn.label}
-              </SheetClose>
+              <Show when="signed-in">
+                <SignOutButton>
+                  <button
+                    type="button"
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "h-11 w-full text-base"
+                    )}
+                  >
+                    <LogOut className="h-5 w-5" />
+                    {nav.signOut}
+                  </button>
+                </SignOutButton>
+              </Show>
+              <Show when="signed-out">
+                <SheetClose
+                  render={
+                    <Link
+                      href={nav.signIn.href}
+                      className={cn(buttonVariants(), "h-11 w-full text-base")}
+                    />
+                  }
+                >
+                  {nav.signIn.label}
+                </SheetClose>
+              </Show>
             </div>
           </SheetContent>
         </Sheet>
