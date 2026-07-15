@@ -60,3 +60,8 @@
 - Name files after the responsibility they contain, not the technology.
 - `components/map/` — MapLibre map view, markers, hover cards.
 - `components/building/` — building floor/unit visualization.
+
+## HTML
+
+- Use semantic HTML elements, well structured, following standard hierarchy
+- Use elements such as main, section, aside, article, etc. not only divs

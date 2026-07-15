@@ -9,8 +9,8 @@ export default function HomePage() {
     <>
       <TopoBackground />
       <Hero />
-      <AboutSection />
       <CatalogPreview />
+      <AboutSection />
       <HowItWorks />
     </>
   );

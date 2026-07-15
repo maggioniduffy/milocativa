@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { Building2, HardHat, SquareParking, Truck, type LucideIcon } from "lucide-react";
+import {
+  Building2,
+  HardHat,
+  SquareParking,
+  Truck,
+  type LucideIcon,
+} from "lucide-react";
 
 import type { HomeCategoryCard } from "@/content/home";
 import { CATEGORY_COLORS, type Category } from "@/types/domain";
@@ -31,7 +37,10 @@ export function CategoryCard({ category }: CategoryCardProps) {
         >
           <Icon className="h-6 w-6" />
         </span>
-        <h3 className="text-lg font-bold text-copy-primary sm:text-[19px]">
+        <h3
+          className="text-lg font-bold text-copy-primary sm:text-[19px]"
+          style={{ color: colors.text }}
+        >
           {category.name}
         </h3>
       </div>

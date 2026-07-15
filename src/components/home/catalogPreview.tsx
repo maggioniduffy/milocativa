@@ -36,7 +36,7 @@ export function CatalogPreview() {
           </Reveal>
         ))}
       </div>
-
+      {/* 
       <div className="mt-12 grid grid-cols-1 gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-[repeat(auto-fill,minmax(230px,1fr))]">
         {catalogPreview.listings.map((listing, index) => (
           <Reveal key={listing.id} delay={index * 0.09}>
@@ -47,7 +47,7 @@ export function CatalogPreview() {
             />
           </Reveal>
         ))}
-      </div>
+      </div> */}
 
       <Reveal delay={0.05} className="mt-8 sm:mt-10">
         <Link
