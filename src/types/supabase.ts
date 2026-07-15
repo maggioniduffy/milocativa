@@ -121,6 +121,9 @@ export interface Database {
         };
         Relationships: [];
       };
+      // Class-table inheritance since 0011: `items` carries only the common
+      // columns; per-subtype fields live in estates/machinery/services/
+      // parking_spots, 1:1 via item_id.
       items: {
         Row: {
           id: string;
@@ -131,20 +134,6 @@ export interface Database {
           price_unit: PriceUnit | null;
           status: ItemStatus;
           category_id: string | null;
-          location: string | null;
-          condition: string | null;
-          latitude: number | null;
-          longitude: number | null;
-          area: number | null;
-          bedrooms: number | null;
-          address: string | null;
-          brand: string | null;
-          model: string | null;
-          year: number | null;
-          service_type: string | null;
-          duration: string | null;
-          spot_number: string | null;
-          building_id: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -157,20 +146,6 @@ export interface Database {
           price_unit?: PriceUnit | null;
           status?: ItemStatus;
           category_id?: string | null;
-          location?: string | null;
-          condition?: string | null;
-          latitude?: number | null;
-          longitude?: number | null;
-          area?: number | null;
-          bedrooms?: number | null;
-          address?: string | null;
-          brand?: string | null;
-          model?: string | null;
-          year?: number | null;
-          service_type?: string | null;
-          duration?: string | null;
-          spot_number?: string | null;
-          building_id?: string | null;
         };
         Update: {
           item_kind?: ItemKind;
@@ -180,20 +155,6 @@ export interface Database {
           price_unit?: PriceUnit | null;
           status?: ItemStatus;
           category_id?: string | null;
-          location?: string | null;
-          condition?: string | null;
-          latitude?: number | null;
-          longitude?: number | null;
-          area?: number | null;
-          bedrooms?: number | null;
-          address?: string | null;
-          brand?: string | null;
-          model?: string | null;
-          year?: number | null;
-          service_type?: string | null;
-          duration?: string | null;
-          spot_number?: string | null;
-          building_id?: string | null;
         };
         Relationships: [
           {
@@ -202,8 +163,151 @@ export interface Database {
             referencedRelation: "categories";
             referencedColumns: ["id"];
           },
+        ];
+      };
+      estates: {
+        Row: {
+          item_id: string;
+          area: number | null;
+          bedrooms: number | null;
+          address: string | null;
+          location: string | null;
+          condition: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          building_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          item_id: string;
+          area?: number | null;
+          bedrooms?: number | null;
+          address?: string | null;
+          location?: string | null;
+          condition?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          building_id?: string | null;
+        };
+        Update: {
+          area?: number | null;
+          bedrooms?: number | null;
+          address?: string | null;
+          location?: string | null;
+          condition?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          building_id?: string | null;
+        };
+        Relationships: [
           {
-            foreignKeyName: "items_building_id_fkey";
+            foreignKeyName: "estates_item_id_fkey";
+            columns: ["item_id"];
+            referencedRelation: "items";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "estates_building_id_fkey";
+            columns: ["building_id"];
+            referencedRelation: "buildings";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      machinery: {
+        Row: {
+          item_id: string;
+          brand: string | null;
+          model: string | null;
+          year: number | null;
+          location: string | null;
+          condition: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          item_id: string;
+          brand?: string | null;
+          model?: string | null;
+          year?: number | null;
+          location?: string | null;
+          condition?: string | null;
+        };
+        Update: {
+          brand?: string | null;
+          model?: string | null;
+          year?: number | null;
+          location?: string | null;
+          condition?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "machinery_item_id_fkey";
+            columns: ["item_id"];
+            referencedRelation: "items";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      services: {
+        Row: {
+          item_id: string;
+          service_type: string | null;
+          duration: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          item_id: string;
+          service_type?: string | null;
+          duration?: string | null;
+        };
+        Update: {
+          service_type?: string | null;
+          duration?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "services_item_id_fkey";
+            columns: ["item_id"];
+            referencedRelation: "items";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      parking_spots: {
+        Row: {
+          item_id: string;
+          spot_number: string | null;
+          location: string | null;
+          condition: string | null;
+          building_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          item_id: string;
+          spot_number?: string | null;
+          location?: string | null;
+          condition?: string | null;
+          building_id?: string | null;
+        };
+        Update: {
+          spot_number?: string | null;
+          location?: string | null;
+          condition?: string | null;
+          building_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "parking_spots_item_id_fkey";
+            columns: ["item_id"];
+            referencedRelation: "items";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "parking_spots_building_id_fkey";
             columns: ["building_id"];
             referencedRelation: "buildings";
             referencedColumns: ["id"];
@@ -374,7 +478,21 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      /**
+       * 0012 — atomic write of an `items` row + its 1:1 subtype row (the JS
+       * client can't open a transaction). SECURITY INVOKER, so the admin-only
+       * RLS policies still gate every write. Returns the item id.
+       */
+      save_item_with_subtype: {
+        Args: {
+          p_item_id: string | null;
+          p_item: Record<string, string | null>;
+          p_subtype: Record<string, string | null>;
+        };
+        Returns: string;
+      };
+    };
   };
 }
 
@@ -384,6 +502,10 @@ export type Person = Database["public"]["Tables"]["people"]["Row"];
 export type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
 export type Building = Database["public"]["Tables"]["buildings"]["Row"];
 export type Item = Database["public"]["Tables"]["items"]["Row"];
+export type EstateRow = Database["public"]["Tables"]["estates"]["Row"];
+export type MachineryRow = Database["public"]["Tables"]["machinery"]["Row"];
+export type ServiceRow = Database["public"]["Tables"]["services"]["Row"];
+export type ParkingSpotRow = Database["public"]["Tables"]["parking_spots"]["Row"];
 export type Listing = Database["public"]["Tables"]["listings"]["Row"];
 export type Availability = Database["public"]["Tables"]["availability"]["Row"];
 export type Rental = Database["public"]["Tables"]["rentals"]["Row"];

@@ -25,7 +25,7 @@ export function RentalsTabs({ rentals }: { rentals: RentalCardData[] }) {
 
   return (
     <div>
-      <div className="flex gap-6 overflow-x-auto border-b border-surface-border">
+      <div className="flex gap-6 overflow-x-auto border-b border-surface-border [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {TAB_ORDER.map((key) => (
           <button
             key={key}
