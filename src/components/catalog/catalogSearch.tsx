@@ -22,11 +22,21 @@ import { useCatalogFilter } from "@/hooks/useCatalogFilter";
 import { CATALOG_FILTER_COLORS } from "@/types/domain";
 import { cn } from "@/lib/utils";
 
+interface CatalogSearchPanelProps {
+  searchInputRef?: React.RefObject<HTMLInputElement | null>;
+  filtersOpen?: boolean;
+  onFiltersOpenChange?: (open: boolean) => void;
+}
+
 /**
  * Expanded search block shown under the navbar on /catalogo: big search pill
  * plus the type / price / duration / availability filter row.
  */
-export function CatalogSearchPanel() {
+export function CatalogSearchPanel({
+  searchInputRef,
+  filtersOpen,
+  onFiltersOpenChange,
+}: CatalogSearchPanelProps) {
   const { activeType, resultCount, setActiveType } = useCatalogFilter();
   const { search, typeFilters } = catalogContent;
 
@@ -53,10 +63,10 @@ export function CatalogSearchPanel() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-3.5 px-4 pb-4 pt-1 sm:px-6">
-      <div className="flex w-full max-w-[620px] items-center gap-2">
+      <div className="flex w-full max-w-[620px] flex-wrap items-center gap-2">
         <div className="flex flex-1 items-center gap-2.5 rounded-full border border-surface-border bg-surface py-1.5 pl-4 pr-1.5 shadow-sm sm:pl-5">
-          <Search className="h-5 w-5 shrink-0 text-copy-muted" />
           <input
+            ref={searchInputRef}
             type="text"
             placeholder={search.placeholder}
             className="min-w-0 flex-1 bg-transparent text-[15px] font-medium text-copy-primary outline-none placeholder:text-copy-muted"
@@ -71,7 +81,7 @@ export function CatalogSearchPanel() {
         </div>
 
         {/* Filter Popup Trigger on mobile */}
-        <Sheet>
+        <Sheet open={filtersOpen} onOpenChange={onFiltersOpenChange}>
           <SheetTrigger
             className={cn(
               "relative inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border bg-surface text-copy-secondary transition-colors hover:border-subtle-border hover:text-copy-primary md:hidden shadow-sm cursor-pointer",
@@ -302,35 +312,58 @@ function FilterDropdownButton({
   );
 }
 
+interface CatalogCompactPillProps {
+  onOpenFilters?: () => void;
+  onFocusSearch?: () => void;
+}
+
 /**
  * Compact search pill that replaces the center nav links once the expanded
- * search block collapses on scroll. Clicking it scrolls back to the top,
- * which re-expands the search.
+ * search block collapses on scroll. The category/price segment jumps
+ * straight into the filters drawer; the search segment jumps straight to
+ * the search input, ready to type.
  */
-export function CatalogCompactPill() {
+export function CatalogCompactPill({
+  onOpenFilters,
+  onFocusSearch,
+}: CatalogCompactPillProps) {
   const { activeTypeLabel } = useCatalogFilter();
   const { search } = catalogContent;
 
   return (
-    <button
-      type="button"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="inline-flex items-center rounded-full border border-surface-border bg-surface p-1.5 shadow-sm transition-shadow hover:shadow-md"
-    >
-      <span className="whitespace-nowrap px-3 text-[13.5px] font-bold text-copy-primary sm:px-4">
-        {activeTypeLabel}
-      </span>
+    <div className="inline-flex items-center rounded-full border border-surface-border bg-surface p-1.5 shadow-sm transition-shadow hover:shadow-md">
+      <button
+        type="button"
+        onClick={onOpenFilters}
+        className="inline-flex items-center rounded-full transition-colors hover:bg-subtle"
+      >
+        <span className="whitespace-nowrap px-3 text-[13.5px] font-bold text-copy-primary sm:px-4">
+          {activeTypeLabel}
+        </span>
+      </button>
       <span className="h-5 w-px bg-surface-border" />
-      <span className="hidden whitespace-nowrap px-4 text-[13.5px] font-semibold text-copy-muted sm:inline">
-        {search.priceLabel}
-      </span>
+      <button
+        type="button"
+        onClick={onOpenFilters}
+        className="hidden items-center rounded-full transition-colors hover:bg-subtle sm:inline-flex"
+      >
+        <span className="whitespace-nowrap px-4 text-[13.5px] font-semibold text-copy-muted">
+          {search.priceLabel}
+        </span>
+      </button>
       <span className="hidden h-5 w-px bg-surface-border sm:inline" />
-      <span className="whitespace-nowrap px-3 text-[13.5px] font-semibold text-copy-muted sm:px-3.5">
-        {search.submitLabel}
-      </span>
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand">
-        <Search className="h-4 w-4 text-white" />
-      </span>
-    </button>
+      <button
+        type="button"
+        onClick={onFocusSearch}
+        className="inline-flex items-center gap-2 rounded-full transition-colors hover:bg-subtle"
+      >
+        <span className="whitespace-nowrap px-3 text-[13.5px] font-semibold text-copy-muted sm:px-3.5">
+          {search.submitLabel}
+        </span>
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand">
+          <Search className="h-4 w-4 text-white" />
+        </span>
+      </button>
+    </div>
   );
 }

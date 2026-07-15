@@ -10,7 +10,7 @@ export default function HomePage() {
       <TopoBackground />
       <Hero />
       <CatalogPreview />
-      <AboutSection />
+      {/* <AboutSection /> */}
       <HowItWorks />
     </>
   );

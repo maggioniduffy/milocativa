@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Show } from "@clerk/nextjs";
@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { BrandMark } from "@/components/layout/brandMark";
+import { ThemeToggle } from "@/components/layout/themeToggle";
 import { UserMenu } from "@/components/layout/userMenu";
 import {
   CatalogCompactPill,
@@ -30,6 +31,8 @@ const SEARCH_COLLAPSE_THRESHOLD = 40;
 export function Navbar() {
   const [elevated, setElevated] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
   const { nav } = siteContent;
   // The catalog page embeds an Airbnb-style search block in the navbar.
@@ -47,6 +50,16 @@ export function Navbar() {
 
   const showCompactPill = hasCatalogSearch && collapsed;
 
+  const handleOpenFilters = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setFiltersOpen(true);
+  };
+
+  const handleFocusSearch = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.setTimeout(() => searchInputRef.current?.focus(), 350);
+  };
+
   return (
     <header
       className={cn(
@@ -56,10 +69,15 @@ export function Navbar() {
           : "border-transparent bg-transparent"
       )}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <BrandMark hideText={showCompactPill} />
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 sm:gap-3 sm:px-6">
+        <BrandMark hideText={showCompactPill} hideOnMobile={showCompactPill} />
 
-        <div className="relative flex min-h-11 flex-1 items-center justify-center">
+        <div
+          className={cn(
+            "relative flex min-h-11 min-w-0 flex-1 items-center",
+            showCompactPill ? "justify-start md:justify-center" : "justify-center"
+          )}
+        >
           <nav
             className={cn(
               "hidden items-center gap-6 transition-all duration-200 md:flex",
@@ -81,17 +99,24 @@ export function Navbar() {
           {hasCatalogSearch ? (
             <div
               className={cn(
-                "absolute transition-all duration-200",
+                "transition-all duration-200 md:absolute",
                 showCompactPill
                   ? "translate-y-0 opacity-100"
                   : "pointer-events-none translate-y-2.5 opacity-0"
               )}
             >
               <Suspense fallback={null}>
-                <CatalogCompactPill />
+                <CatalogCompactPill
+                  onOpenFilters={handleOpenFilters}
+                  onFocusSearch={handleFocusSearch}
+                />
               </Suspense>
             </div>
           ) : null}
+        </div>
+
+        <div className="hidden md:block">
+          <ThemeToggle />
         </div>
 
         {/* Signed-in: dashboard-style bell + avatar pill on every breakpoint. */}
@@ -124,6 +149,12 @@ export function Navbar() {
               <SheetHeader>
                 <SheetTitle>{nav.menuTitle}</SheetTitle>
               </SheetHeader>
+              <div className="flex items-center justify-between px-4 py-2 md:hidden">
+                <span className="text-base font-medium text-copy-secondary">
+                  {nav.themeToggle}
+                </span>
+                <ThemeToggle />
+              </div>
               <nav className="flex flex-col gap-1 px-4" aria-label="Principal">
                 {nav.links.map((link) => (
                   <SheetClose
@@ -166,7 +197,11 @@ export function Navbar() {
           }}
         >
           <Suspense fallback={null}>
-            <CatalogSearchPanel />
+            <CatalogSearchPanel
+              searchInputRef={searchInputRef}
+              filtersOpen={filtersOpen}
+              onFiltersOpenChange={setFiltersOpen}
+            />
           </Suspense>
         </div>
       ) : null}

@@ -27,7 +27,7 @@ Ignore the `.dc.html` mechanics (`<x-dc>`, `renderVals()`, `<sc-for>`, `<x-impor
 |---|---|
 | Page background | `#F7F9FA` |
 | Surface | `#FFFFFF` |
-| Primary accent (petrol blue) | `#0C5678` · hover `#0A465F` · dim `rgba(12,86,120,0.10)` |
+| Primary accent (petrol blue) | `#03597F` · hover `#0A465F` · dim `rgba(3, 89, 127,0.10)` |
 | Secondary accent (teal) | `#0E8C7F` |
 | Tertiary accent (sky) | `#3E8FB0` |
 | Amber (machinery) | `#B57614` / `#B8720F` · tint `rgba(217,143,42,0.14)` |
@@ -51,7 +51,7 @@ Ignore the `.dc.html` mechanics (`<x-dc>`, `renderVals()`, `<sc-for>`, `<x-impor
 | External / No publicado | diagonal hatch `repeating-linear-gradient(45deg,#F2F5F6 0 6px,#E9EEEF 6px 12px)`, border `#DCE3E5` | `#9FB2B8` — **non-interactive** |
 
 ### Category → tag color
-Estate `#0C5678` · Machinery `#B57614` · Service `#0E8C7F` · ParkingSpot `#0C5678` (outline variant).
+Estate `#03597F` · Machinery `#B57614` · Service `#0E8C7F` · ParkingSpot `#03597F` (outline variant).
 
 ### Typography
 - Font: **Plus Jakarta Sans** (400/500/600/700/800). Display italic accents use **Instrument Serif** (italic) on the landing only.

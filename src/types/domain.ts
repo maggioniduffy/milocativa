@@ -27,17 +27,17 @@ export interface UnitStatusColor extends BadgeColor {
 }
 
 export const CATEGORY_COLORS: Record<Category, BadgeColor> = {
-  estate: { fill: "rgba(12, 86, 120, 0.10)", text: "#0C5678" },
+  estate: { fill: "rgba(3, 89, 127, 0.10)", text: "#03597F" },
   machinery: { fill: "rgba(217, 142, 30, 0.12)", text: "#B8720F" },
   service: { fill: "rgba(14, 140, 127, 0.10)", text: "#0E8C7F" },
   // ParkingSpot shares the brand petrol but renders as an outline badge variant.
-  parking: { fill: "transparent", text: "#0C5678" },
+  parking: { fill: "transparent", text: "#03597F" },
 };
 
 /** Dot / active-pill color for the catalog type filter, including the "all" option. */
 export const CATALOG_FILTER_COLORS: Record<Category | "all", string> = {
-  all: "#0C5678",
-  estate: "#0C5678",
+  all: "#03597F",
+  estate: "#03597F",
   machinery: "#B8720F",
   service: "#0E8C7F",
   parking: "#3E8FB0",

@@ -22,6 +22,7 @@ export const siteContent = {
     openMenu: "Abrir menú",
     notifications: "Ver notificaciones",
     accountMenu: "Abrir menú de cuenta",
+    themeToggle: "Cambiar tema",
   },
   footer: {
     columns: [

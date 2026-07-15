@@ -1,5 +1,5 @@
 /** Category colors cycled across building cards, in display order. */
-const ILLUSTRATION_COLORS = ["#0C5678", "#B8720F", "#0E8C7F"] as const;
+const ILLUSTRATION_COLORS = ["#03597F", "#B8720F", "#0E8C7F"] as const;
 
 function tint(hex: string, amount: number): string {
   const num = parseInt(hex.replace("#", ""), 16);

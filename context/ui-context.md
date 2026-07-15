@@ -2,35 +2,42 @@
 
 ## Theme
 
-Light only. No dark mode. The visual language is a warm, airy marketplace surface — soft neutral backgrounds, generous white space, and a confident petrol-blue accent for interactive elements. This follows the Airbnb-style brief from the project overview: light, trustworthy, low-noise, built for browsing photos and listings comfortably.
+Light (default) and dark, toggled by the user. The visual language is a warm, airy marketplace surface — soft neutral backgrounds, generous white space, and a confident petrol-blue accent for interactive elements. This follows the Airbnb-style brief from the project overview: light, trustworthy, low-noise, built for browsing photos and listings comfortably; dark mode reproduces the same hierarchy on a deep petrol-navy ground.
 
-All colors are defined as CSS custom properties in `globals.css` and mapped to Tailwind tokens via `@theme inline`. Components must use these tokens — no hardcoded hex values or raw Tailwind color classes like `sky-*` or `slate-*`.
+All colors are defined as CSS custom properties in `globals.css` and mapped to Tailwind tokens via `@theme inline`. Components must use these tokens — no hardcoded hex values or raw Tailwind color classes like `sky-*` or `slate-*`. Light values live on `:root`; dark overrides live on `html[data-theme="dark"]` — every token is defined explicitly in both blocks, none is left to fall back.
 
-| Role                 | CSS Variable             | Hex / Value                     |
-| -------------------- | ------------------------ | ------------------------------- |
-| Page background      | `--bg-base`              | `#F7F9FA`                       |
-| Surface              | `--bg-surface`           | `#FFFFFF`                       |
-| Elevated surface     | `--bg-elevated`          | `#FFFFFF` (+ shadow, see below) |
-| Subtle surface       | `--bg-subtle`            | `#EEF2F3`                       |
-| Default border       | `--border-default`       | `#DCE3E5`                       |
-| Subtle border        | `--border-subtle`        | `#C9D3D6`                       |
-| Primary text         | `--text-primary`         | `#0B1F26`                       |
-| Secondary text       | `--text-secondary`       | `#3E545C`                       |
-| Muted text           | `--text-muted`           | `#6F8790`                       |
-| Faint text           | `--text-faint`           | `#9FB2B8`                       |
-| Brand accent         | `--accent-primary`       | `#0C5678` (petrol blue)         |
-| Brand accent hover   | `--accent-primary-hover` | `#0A465F`                       |
-| Brand dim            | `--accent-primary-dim`   | `rgba(12, 86, 120, 0.10)`       |
-| Secondary accent     | `--accent-teal`          | `#0E8C7F`                       |
-| Secondary accent dim | `--accent-teal-dim`      | `rgba(14, 140, 127, 0.10)`      |
-| Tertiary accent      | `--accent-sky`           | `#3E8FB0`                       |
-| Error                | `--state-error`          | `#D9483F`                       |
-| Success              | `--state-success`        | `#1F9D6B`                       |
-| Warning              | `--state-warning`        | `#D98E1E`                       |
+| Role                  | CSS Variable              | Light                           | Dark                        |
+| --------------------- | -------------------------- | -------------------------------- | ---------------------------- |
+| Page background       | `--bg-base`               | `#F7F9FA`                       | `#0A141B`                   |
+| Surface                | `--bg-surface`            | `#FFFFFF`                       | `#101E29`                   |
+| Elevated surface       | `--bg-elevated`           | `#FFFFFF` (+ shadow, see below) | `#101E29` (+ shadow)        |
+| Subtle surface         | `--bg-subtle`             | `#EEF2F3`                       | `#16262F`                   |
+| Default border         | `--border-default`        | `#DCE3E5`                       | `#223440`                   |
+| Subtle border          | `--border-subtle`         | `#C9D3D6`                       | `#33505C`                   |
+| Primary text           | `--text-primary`          | `#0B1F26`                       | `#EAF2F5`                   |
+| Secondary text         | `--text-secondary`        | `#3E545C`                       | `#A9BCC4`                   |
+| Muted text             | `--text-muted`            | `#6F8790`                       | `#7F97A0`                   |
+| Faint text             | `--text-faint`            | `#9FB2B8`                       | `#5C7079`                   |
+| Brand accent           | `--accent-primary`        | `#03597F` (petrol blue)         | `#3E9BC7`                   |
+| Brand accent hover     | `--accent-primary-hover`  | `#0A465F`                       | `#5FB2D8`                   |
+| Brand dim              | `--accent-primary-dim`    | `rgba(3, 89, 127, 0.10)`       | `rgba(62, 155, 199, 0.16)`  |
+| Secondary accent       | `--accent-teal`           | `#0E8C7F`                       | `#2FC7AC`                   |
+| Secondary accent dim   | `--accent-teal-dim`       | `rgba(14, 140, 127, 0.10)`      | `rgba(47, 199, 172, 0.16)`  |
+| Tertiary accent        | `--accent-sky`            | `#3E8FB0`                       | `#5FAFC9`                   |
+| Error                  | `--state-error`           | `#D9483F`                       | `#E2645A`                   |
+| Success                | `--state-success`         | `#1F9D6B`                       | `#3BC98C`                   |
+| Warning                | `--state-warning`         | `#D98E1E`                       | `#E0A542`                   |
 
-Elevated surfaces use `--bg-surface` plus a soft shadow (`shadow-md`/`shadow-lg` from the Tailwind scale) rather than a darker fill — this keeps the light theme from muddying as depth increases.
+Elevated surfaces use `--bg-surface` plus a soft shadow (`shadow-md`/`shadow-lg` from the Tailwind scale) rather than a darker fill — this keeps the theme from muddying as depth increases, in both light and dark.
 
 Tailwind utility names map to these variables. Use `bg-base`, `bg-surface`, `text-copy-primary`, `text-copy-muted`, `border-surface-border`, `text-brand`, `bg-accent-dim`, `text-accent-teal`, etc.
+
+### Theme switching
+
+- Switching is attribute-based: `document.documentElement.setAttribute('data-theme', 'dark' | 'light')` — no class toggling, no JS-driven inline styles. Implemented in [useTheme.ts](../src/hooks/useTheme.ts).
+- Preference is read from `localStorage` (key `milocativa-theme`) on load, falling back to `window.matchMedia('(prefers-color-scheme: dark)')` when unset. An inline `beforeInteractive` script in [layout.tsx](../src/app/layout.tsx) applies the attribute before hydration to avoid a flash of the wrong theme; the `<html>` element carries `suppressHydrationWarning` for this reason.
+- The toggle lives in the navbar ([themeToggle.tsx](../src/components/layout/themeToggle.tsx)): a 38×38px circular button showing a moon (switch to dark) or sun (switch to light) icon — the icon shown is the theme you'd switch *to*.
+- `html[data-theme="dark"] img { filter: brightness(.94) contrast(1.02); }` keeps photography from blowing out against the dark background.
 
 ## Content Language
 
@@ -85,7 +92,7 @@ A building's page shows an interactive floor/unit diagram: a simple stacked-floo
 
 | Category  | Fill (dim)                 | Text color | Character                 |
 | --------- | -------------------------- | ---------- | ------------------------- |
-| Estate    | `rgba(12, 86, 120, 0.10)`  | `#0C5678`  | Petrol blue (brand)       |
+| Estate    | `rgba(3, 89, 127, 0.10)`  | `#03597F`  | Petrol blue (brand)       |
 | Machinery | `rgba(217, 142, 30, 0.12)` | `#B8720F`  | Amber — industrial, heavy |
 | Service   | `rgba(14, 140, 127, 0.10)` | `#0E8C7F`  | Teal — operational        |
 

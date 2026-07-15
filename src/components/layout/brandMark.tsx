@@ -23,9 +23,21 @@ function BrandGlyph({ className }: { className?: string }) {
   );
 }
 
-export function BrandMark({ hideText }: { hideText?: boolean }) {
+export function BrandMark({
+  hideText,
+  hideOnMobile,
+}: {
+  hideText?: boolean;
+  hideOnMobile?: boolean;
+}) {
   return (
-    <Link href="/" className="flex items-center gap-2.5 shrink-0">
+    <Link
+      href="/"
+      className={cn(
+        "items-center gap-2.5 shrink-0",
+        hideOnMobile ? "hidden md:flex" : "flex"
+      )}
+    >
       <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-brand text-primary-foreground shrink-0">
         <BrandGlyph className="h-[18px] w-[18px]" />
       </span>

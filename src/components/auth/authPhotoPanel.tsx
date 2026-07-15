@@ -22,7 +22,7 @@ export function AuthPhotoPanel() {
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[linear-gradient(120deg,rgba(12,86,120,.34)_0%,transparent_55%)]"
+        className="absolute inset-0 bg-[linear-gradient(120deg,rgba(3, 89, 127,.34)_0%,transparent_55%)]"
         aria-hidden
       />
 

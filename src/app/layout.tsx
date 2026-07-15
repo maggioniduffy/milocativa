@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import Script from "next/script";
 import "./globals.css";
 
 import { siteContent } from "@/content/site";
@@ -40,8 +41,14 @@ export default function RootLayout({
       <html
         lang="es"
         className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
+        suppressHydrationWarning
       >
-        <body className="min-h-full flex flex-col">{children}</body>
+        <body className="min-h-full flex flex-col">
+          <Script id="theme-init" strategy="beforeInteractive">
+            {`(function(){try{var t=localStorage.getItem('milocativa-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`}
+          </Script>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

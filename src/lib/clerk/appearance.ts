@@ -47,7 +47,7 @@ export const clerkAppearance = {
     formFieldWarningText: "text-warning",
     formFieldRow: "gap-4",
     formButtonPrimary:
-      "mt-1 w-full rounded-full bg-brand px-4 py-[14px] text-[15.5px] font-bold normal-case text-white shadow-[0_4px_16px_rgba(12,86,120,.28)] hover:bg-brand-hover active:scale-[.985]",
+      "mt-1 w-full rounded-full bg-brand px-4 py-[14px] text-[15.5px] font-bold normal-case text-white shadow-[0_4px_16px_rgba(3, 89, 127,.28)] hover:bg-brand-hover active:scale-[.985]",
     footer: "hidden",
     identityPreview: "rounded-xl border-surface-border bg-subtle",
     identityPreviewText: "text-copy-primary",

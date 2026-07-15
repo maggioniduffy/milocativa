@@ -131,7 +131,7 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
 
 - Tailwind v4 CSS-first config (no tailwind.config.js) — all theme tokens live in globals.css via @theme inline.
 - shadcn/ui components live in components/ui/ and must not be modified after installation.
-- Light-only theme: petrol-blue (#0C5678) primary accent, teal and sky secondary accents; no .dark class toggle needed.
+- Light (default) + dark theme: petrol-blue (#03597F) primary accent, teal and sky secondary accents. Dark theme uses `html[data-theme="dark"]` attribute overrides (not a `.dark` class) — see ui-context.md "Theme switching".
 - Next.js 16 uses proxy.ts (not middleware.ts) — the middleware file convention was renamed in v16.
 - No Prisma/ORM: Supabase Postgres accessed directly via RLS-scoped Supabase clients (browser and server), authorized via Clerk Third-Party Auth (`accessToken` callback forwarding the native Clerk session token — no JWT template, no shared secret).
 - Role (admin | user) lives in Clerk publicMetadata, not a database table; RLS policies read it via auth.jwt() -> 'public_metadata' ->> 'role'.
@@ -149,7 +149,7 @@ Wire the catalog and building pages to Supabase (real listings, buildings, and u
 ## Session Notes
 
 - Project uses Next.js 16, React 19, Tailwind v4, TypeScript.
-- Light-only theme. All color tokens are CSS custom properties mapped via @theme inline.
+- Light (default) + dark theme, toggled via the navbar moon/sun button (`components/layout/themeToggle.tsx`, `hooks/useTheme.ts`), persisted in `localStorage` (`milocativa-theme`). All color tokens are CSS custom properties mapped via @theme inline, defined on `:root` (light) and overridden on `html[data-theme="dark"]`.
 - Tailwind utility classes: bg-base, bg-surface, bg-elevated, bg-subtle, text-copy-primary, text-copy-muted, border-surface-border, text-brand, bg-accent-dim, text-accent-teal, etc.
 - @clerk/nextjs (Core 3, requires Next.js 15.2.3+) installed; auth file is proxy.ts, not middleware.ts.
 - createRouteMatcher() is deprecated in this Clerk version — route protection uses inline pathname.startsWith() checks; the admin role check reads `sessionClaims.public_metadata.role` directly (not `auth.protect({ role })`, since the spec wants a redirect-to-home on role mismatch rather than `auth.protect`'s default 404).

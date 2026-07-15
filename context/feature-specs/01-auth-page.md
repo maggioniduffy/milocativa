@@ -43,7 +43,7 @@ These have already bitten us once; don't trust older docs or training data on th
 ## Styling — light theme, per `ui-context.md`
 
 - Light theme only, no dark mode toggle or dark variant.
-- Use existing CSS variable tokens (`--bg-surface`, `--accent-primary` petrol blue `#0C5678`, `--border-default`, etc.) via the Tailwind mapping — no hardcoded hex values inside the Clerk `appearance` config.
+- Use existing CSS variable tokens (`--bg-surface`, `--accent-primary` petrol blue `#03597F`, `--border-default`, etc.) via the Tailwind mapping — no hardcoded hex values inside the Clerk `appearance` config.
 - Card container: `rounded-3xl` (modal/overlay scale), white surface, soft shadow — consistent with our modal/dialog pattern.
 - Primary action buttons use `--accent-primary` / `--accent-primary-hover`, full-width on mobile (`w-full sm:w-auto`).
 - Typography: Plus Jakarta Sans via the existing `--font-jakarta-sans` variable.
